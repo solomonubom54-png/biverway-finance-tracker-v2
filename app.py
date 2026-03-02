@@ -76,15 +76,19 @@ if not income_df_month.empty:
 
     if st.button("🗑 Clear This Month Income"):
         for _, row in income_df_month.iterrows():
-            delete_by_id("Income", row["id"])
+            if row.get("id"):
+                delete_by_id("Income", row["id"])
         st.rerun()
 
-    for _, row in income_df_month.iterrows():
+    for i, row in income_df_month.iterrows():
+        button_key = f"inc_{row.get('id', i)}_{i}"
+
         if st.button(
             f"Delete {row['income_source']} - ₦{row['amount']:,}",
-            key=row["id"]
+            key=button_key
         ):
-            delete_by_id("Income", row["id"])
+            if row.get("id"):
+                delete_by_id("Income", row["id"])
             st.rerun()
 else:
     st.info("No income entries yet.")
@@ -134,15 +138,19 @@ if not expense_df_month.empty:
 
     if st.button("🗑 Clear This Month Expense"):
         for _, row in expense_df_month.iterrows():
-            delete_by_id("Expense", row["id"])
+            if row.get("id"):
+                delete_by_id("Expense", row["id"])
         st.rerun()
 
-    for _, row in expense_df_month.iterrows():
+    for i, row in expense_df_month.iterrows():
+        button_key = f"exp_{row.get('id', i)}_{i}"
+
         if st.button(
             f"Delete {row['category']} - ₦{row['amount']:,}",
-            key=row["id"]
+            key=button_key
         ):
-            delete_by_id("Expense", row["id"])
+            if row.get("id"):
+                delete_by_id("Expense", row["id"])
             st.rerun()
 else:
     st.info("No expense entries yet.")
