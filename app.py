@@ -7,19 +7,25 @@ from core.sheets import append_row, load_sheet, delete_row, clear_sheet
 st.set_page_config(page_title="Biverway Finance OS", layout="wide")
 
 st.title("BIVERWAY FINANCE OS")
-st.markdown("Reliable. Efficient. Structured Capital.")
+st.caption("Reliable. Efficient. Structured Capital.")
 st.divider()
 
 # ====================== MONTH SELECTOR ======================
-working_month = st.date_input("Working Month", value=datetime.today())
-current_month = working_month.strftime("%b %Y")
-st.caption(f"Operating Month: {current_month}")
+top_col1, top_col2 = st.columns([2, 1])
 
-# ====================== HEADERS ======================
+with top_col1:
+    working_month = st.date_input("Working Month", value=datetime.today())
+    current_month = working_month.strftime("%b %Y")
+
+with top_col2:
+    st.markdown(f"**Operating Period:**  \n{current_month}")
+
+st.divider()
+
+# ====================== LOAD DATA ======================
 income_headers = ["month_year", "income_source", "income_type", "amount", "notes"]
 expense_headers = ["month_year", "category", "amount", "description"]
 
-# ====================== LOAD DATA ======================
 income_records = load_sheet("Income", income_headers)
 expense_records = load_sheet("Expense", expense_headers)
 
@@ -36,10 +42,14 @@ income_df_month = income_df[income_df["month_year"] == current_month].copy()
 expense_df_month = expense_df[expense_df["month_year"] == current_month].copy()
 
 if not income_df_month.empty:
-    income_df_month["amount"] = pd.to_numeric(income_df_month["amount"], errors="coerce").fillna(0)
+    income_df_month["amount"] = pd.to_numeric(
+        income_df_month["amount"], errors="coerce"
+    ).fillna(0)
 
 if not expense_df_month.empty:
-    expense_df_month["amount"] = pd.to_numeric(expense_df_month["amount"], errors="coerce").fillna(0)
+    expense_df_month["amount"] = pd.to_numeric(
+        expense_df_month["amount"], errors="coerce"
+    ).fillna(0)
 
 total_income = income_df_month["amount"].sum() if not income_df_month.empty else 0
 total_expense = expense_df_month["amount"].sum() if not expense_df_month.empty else 0
@@ -52,12 +62,21 @@ savings_rate = (net_surplus / total_income * 100) if total_income else 0
 
 st.subheader("Capital Position")
 
-col1, col2, col3 = st.columns(3)
-col1.metric("Total Income", f"₦{total_income:,.0f}")
-col2.metric("Total Expense", f"₦{total_expense:,.0f}")
-col3.metric("Net Surplus", f"₦{net_surplus:,.0f}")
+metric1, metric2, metric3 = st.columns(3)
 
-st.write(f"Savings Rate: {savings_rate:.1f}%")
+metric1.metric("Total Income", f"₦{total_income:,.0f}")
+metric2.metric("Total Expense", f"₦{total_expense:,.0f}")
+metric3.metric("Net Surplus", f"₦{net_surplus:,.0f}")
+
+st.markdown(f"**Savings Rate:** {savings_rate:.1f}%")
+
+if total_income > 0:
+    if savings_rate >= 30:
+        st.success("Capital posture is strong and well controlled.")
+    elif savings_rate >= 15:
+        st.warning("Capital posture is stable but can be optimized.")
+    else:
+        st.error("Capital margin is under pressure.")
 
 st.divider()
 
@@ -67,6 +86,8 @@ st.divider()
 
 st.subheader("Capital Intake")
 
+left_col, right_col = st.columns([1, 1])
+
 income_type_map = {
     "Skill": "Active",
     "Salary": "Active",
@@ -75,34 +96,38 @@ income_type_map = {
     "Rental": "Passive"
 }
 
-with st.form("income_form"):
-    income_source = st.selectbox("Income Source", list(income_type_map.keys()))
-    amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
-    notes = st.text_area("Notes (optional)")
-    submit_income = st.form_submit_button("Add Capital")
+with left_col:
+    st.markdown("#### Add Capital Entry")
 
-if submit_income:
-    append_row(
-        "Income",
-        [current_month, income_source, income_type_map[income_source], amount, notes]
-    )
-    st.success("Capital recorded.")
-    st.rerun()
+    with st.form("income_form"):
+        income_source = st.selectbox("Income Source", list(income_type_map.keys()))
+        amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
+        notes = st.text_area("Notes (optional)")
+        submit_income = st.form_submit_button("Add Capital")
 
-if not income_df_month.empty:
-    st.dataframe(
-        income_df_month[["income_source", "income_type", "amount", "notes"]],
-        use_container_width=True
-    )
-
-    if st.button("Clear All Income"):
-        clear_sheet("Income")
+    if submit_income:
+        append_row(
+            "Income",
+            [current_month, income_source, income_type_map[income_source], amount, notes]
+        )
+        st.success("Capital recorded.")
         st.rerun()
 
-    for idx, row in income_df_month.iterrows():
-        if st.button(f"Delete {row['income_source']} - ₦{row['amount']:,}", key=f"inc_{idx}"):
-            delete_row("Income", idx + 2)
+with right_col:
+    st.markdown("#### Recorded Income")
+
+    if not income_df_month.empty:
+        st.dataframe(
+            income_df_month[["income_source", "income_type", "amount"]],
+            use_container_width=True
+        )
+
+        if st.button("Clear Income Records"):
+            clear_sheet("Income")
             st.rerun()
+
+    else:
+        st.info("No income entries for this month.")
 
 st.divider()
 
@@ -112,43 +137,49 @@ st.divider()
 
 st.subheader("Capital Outflow")
 
+left_col2, right_col2 = st.columns([1, 1])
+
 expense_categories = [
     "Rent", "Food", "Utilities", "Transport",
     "Healthcare", "Education", "Subscription", "Family Support"
 ]
 
-with st.form("expense_form"):
-    category = st.selectbox("Category", expense_categories)
-    expense_amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
-    description = st.text_area("Description (optional)")
-    submit_expense = st.form_submit_button("Add Outflow")
+with left_col2:
+    st.markdown("#### Add Outflow Entry")
 
-if submit_expense:
-    append_row("Expense", [current_month, category, expense_amount, description])
-    st.success("Outflow recorded.")
-    st.rerun()
+    with st.form("expense_form"):
+        category = st.selectbox("Category", expense_categories)
+        expense_amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
+        description = st.text_area("Description (optional)")
+        submit_expense = st.form_submit_button("Add Outflow")
 
-if not expense_df_month.empty:
-    total_expense = expense_df_month["amount"].sum()
-
-    if total_expense > 0:
-        expense_df_month["% of Total"] = (
-            expense_df_month["amount"] / total_expense * 100
-        ).round(0).astype(int).astype(str) + "%"
-
-    st.dataframe(
-        expense_df_month[["category", "amount", "% of Total", "description"]],
-        use_container_width=True
-    )
-
-    if st.button("Clear All Expenses"):
-        clear_sheet("Expense")
+    if submit_expense:
+        append_row("Expense", [current_month, category, expense_amount, description])
+        st.success("Outflow recorded.")
         st.rerun()
 
-    for idx, row in expense_df_month.iterrows():
-        if st.button(f"Delete {row['category']} - ₦{row['amount']:,}", key=f"exp_{idx}"):
-            delete_row("Expense", idx + 2)
+with right_col2:
+    st.markdown("#### Recorded Expenses")
+
+    if not expense_df_month.empty:
+        total_expense = expense_df_month["amount"].sum()
+
+        if total_expense > 0:
+            expense_df_month["% of Total"] = (
+                expense_df_month["amount"] / total_expense * 100
+            ).round(0).astype(int).astype(str) + "%"
+
+        st.dataframe(
+            expense_df_month[["category", "amount", "% of Total"]],
+            use_container_width=True
+        )
+
+        if st.button("Clear Expense Records"):
+            clear_sheet("Expense")
             st.rerun()
+
+    else:
+        st.info("No expenses recorded for this month.")
 
 st.divider()
 
