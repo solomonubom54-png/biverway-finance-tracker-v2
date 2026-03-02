@@ -118,11 +118,14 @@ st.subheader(f"📋 Expense Records – {current_month}")
 
 if not expense_df_month.empty:
     total_expense = expense_df_month["amount"].sum()
-    expense_df_month["% of Total"] = (
-        (expense_df_month["amount"] / total_expense * 100)
-        .round(0).astype(int).astype(str) + "%"
-        if total_expense > 0 else "0%"
-    )
+
+    if total_expense > 0:
+        expense_df_month["% of Total"] = (
+            (expense_df_month["amount"] / total_expense * 100)
+            .round(0).astype(int).astype(str) + "%"
+        )
+    else:
+        expense_df_month["% of Total"] = "0%"
 
     st.dataframe(
         expense_df_month[["category", "amount", "% of Total", "description"]],
@@ -183,8 +186,7 @@ if total_income > 0 and net_surplus > 0:
             "Allocated Amount (₦)": round(net_surplus * pct / 100, 0)
         })
 
-    allocation_df_display = pd.DataFrame(allocation_list)
-    st.dataframe(allocation_df_display, use_container_width=True)
+    st.dataframe(pd.DataFrame(allocation_list), use_container_width=True)
 
     if st.button("💾 Save Allocation for Month"):
 
