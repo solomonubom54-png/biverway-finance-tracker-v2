@@ -1,7 +1,8 @@
-iimport streamlit as st
+import streamlit as st
 import pandas as pd
 from datetime import datetime
-from core.sheets import append_row, load_sheet, delete_row, clear_sheet
+import uuid
+from core.sheets import append_row, load_sheet, delete_by_id
 
 # ====================== PAGE CONFIG ======================
 st.set_page_config(page_title="💎 Biverway Personal Finance Tracker", layout="wide")
@@ -16,30 +17,27 @@ current_month = working_month.strftime("%b %Y")
 st.info(f"All data below is for {current_month}")
 
 # ====================== HEADERS ======================
-income_headers = ["month_year", "income_source", "income_type", "amount", "notes"]
-expense_headers = ["month_year", "category", "amount", "description"]
+income_headers = ["id", "month_year", "income_source", "income_type", "amount", "notes"]
+expense_headers = ["id", "month_year", "category", "amount", "description"]
+allocation_headers = ["id", "month_year", "category", "percentage", "allocated_amount"]
 
 # ====================== LOAD DATA ======================
 income_records = load_sheet("Income", income_headers)
 expense_records = load_sheet("Expense", expense_headers)
+allocation_records = load_sheet("Allocation_Log", allocation_headers)
 
 income_df = pd.DataFrame(income_records)
 expense_df = pd.DataFrame(expense_records)
+allocation_df = pd.DataFrame(allocation_records)
 
-if "month_year" not in income_df.columns:
-    income_df["month_year"] = ""
+if not income_df.empty:
+    income_df["amount"] = pd.to_numeric(income_df["amount"], errors="coerce").fillna(0)
 
-if "month_year" not in expense_df.columns:
-    expense_df["month_year"] = ""
+if not expense_df.empty:
+    expense_df["amount"] = pd.to_numeric(expense_df["amount"], errors="coerce").fillna(0)
 
-income_df_month = income_df[income_df["month_year"] == current_month].copy()
-expense_df_month = expense_df[expense_df["month_year"] == current_month].copy()
-
-if not income_df_month.empty:
-    income_df_month["amount"] = pd.to_numeric(income_df_month["amount"], errors="coerce").fillna(0)
-
-if not expense_df_month.empty:
-    expense_df_month["amount"] = pd.to_numeric(expense_df_month["amount"], errors="coerce").fillna(0)
+income_df_month = income_df[income_df["month_year"] == current_month] if not income_df.empty else pd.DataFrame()
+expense_df_month = expense_df[expense_df["month_year"] == current_month] if not expense_df.empty else pd.DataFrame()
 
 # ====================== INCOME TRACKER ======================
 st.header("💰 Income Tracker")
@@ -62,7 +60,8 @@ with st.form("income_form"):
 if submit_income:
     append_row(
         "Income",
-        [current_month, income_source, income_type_map[income_source], amount, notes]
+        [str(uuid.uuid4()), current_month, income_source,
+         income_type_map[income_source], amount, notes]
     )
     st.success("Income added successfully.")
     st.rerun()
@@ -71,20 +70,21 @@ st.subheader(f"📋 Income Records – {current_month}")
 
 if not income_df_month.empty:
     st.dataframe(
-        income_df_month"income_source", "income_type", "amount", "notes",
+        income_df_month[["income_source", "income_type", "amount", "notes"]],
         use_container_width=True
     )
 
-    if st.button("🗑 Clear All Income Records"):
-        clear_sheet("Income")
+    if st.button("🗑 Clear This Month Income"):
+        for _, row in income_df_month.iterrows():
+            delete_by_id("Income", row["id"])
         st.rerun()
 
-    for idx, row in income_df_month.iterrows():
+    for _, row in income_df_month.iterrows():
         if st.button(
             f"Delete {row['income_source']} - ₦{row['amount']:,}",
-            key=f"inc_{idx}"
+            key=row["id"]
         ):
-            delete_row("Income", idx + 2)
+            delete_by_id("Income", row["id"])
             st.rerun()
 else:
     st.info("No income entries yet.")
@@ -106,7 +106,11 @@ with st.form("expense_form"):
     submit_expense = st.form_submit_button("Add Expense")
 
 if submit_expense:
-    append_row("Expense", [current_month, category, expense_amount, description])
+    append_row(
+        "Expense",
+        [str(uuid.uuid4()), current_month, category,
+         expense_amount, description]
+    )
     st.success("Expense added successfully.")
     st.rerun()
 
@@ -114,28 +118,28 @@ st.subheader(f"📋 Expense Records – {current_month}")
 
 if not expense_df_month.empty:
     total_expense = expense_df_month["amount"].sum()
-    if total_expense > 0:
-        expense_df_month["% of Total"] = (
-            expense_df_month["amount"] / total_expense * 100
-        ).round(0).astype(int).astype(str) + "%"
-    else:
-        expense_df_month["% of Total"] = "0%"
+    expense_df_month["% of Total"] = (
+        (expense_df_month["amount"] / total_expense * 100)
+        .round(0).astype(int).astype(str) + "%"
+        if total_expense > 0 else "0%"
+    )
 
     st.dataframe(
-        expense_df_month"category", "amount", "% of Total", "description",
+        expense_df_month[["category", "amount", "% of Total", "description"]],
         use_container_width=True
     )
 
-    if st.button("🗑 Clear All Expense Records"):
-        clear_sheet("Expense")
+    if st.button("🗑 Clear This Month Expense"):
+        for _, row in expense_df_month.iterrows():
+            delete_by_id("Expense", row["id"])
         st.rerun()
 
-    for idx, row in expense_df_month.iterrows():
+    for _, row in expense_df_month.iterrows():
         if st.button(
             f"Delete {row['category']} - ₦{row['amount']:,}",
-            key=f"exp_{idx}"
+            key=row["id"]
         ):
-            delete_row("Expense", idx + 2)
+            delete_by_id("Expense", row["id"])
             st.rerun()
 else:
     st.info("No expense entries yet.")
@@ -144,95 +148,60 @@ else:
 st.divider()
 st.header("📊 Financial Performance")
 
-with st.expander("View Details", expanded=False):
-    total_income = income_df_month["amount"].sum() if not income_df_month.empty else 0
-    total_expense = expense_df_month["amount"].sum() if not expense_df_month.empty else 0
-    net_surplus = total_income - total_expense
-    savings_rate = (net_surplus / total_income * 100) if total_income else 0
+total_income = income_df_month["amount"].sum() if not income_df_month.empty else 0
+total_expense = expense_df_month["amount"].sum() if not expense_df_month.empty else 0
+net_surplus = total_income - total_expense
+savings_rate = (net_surplus / total_income * 100) if total_income else 0
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Income", f"₦{total_income:,.0f}")
-    col2.metric("Total Expenses", f"₦{total_expense:,.0f}")
-    col3.metric("Net Surplus", f"₦{net_surplus:,.0f}")
+col1, col2, col3 = st.columns(3)
+col1.metric("Total Income", f"₦{total_income:,.0f}")
+col2.metric("Total Expenses", f"₦{total_expense:,.0f}")
+col3.metric("Net Surplus", f"₦{net_surplus:,.0f}")
 
-    st.divider()
-    st.subheader("Savings Insight")
-    st.write(f"Net Surplus: ₦{net_surplus:,.0f}")
-    st.write(f"Savings Rate: {savings_rate:.1f}%")
-    if total_income == 0:
-        st.error("No income recorded — financial performance cannot be evaluated.")
-    else:
-        if savings_rate >= 30:
-            st.success("Strong financial position — excellent surplus discipline.")
-        elif 15 <= savings_rate < 30:
-            st.warning("Stable position — good, but optimization possible.")
-        elif 1 <= savings_rate < 15:
-            st.warning("Weak margin — expenses are too close to income.")
-        else:
-            st.error("Deficit — expenses exceed income.")
+st.write(f"Savings Rate: {savings_rate:.1f}%")
 
-    st.divider()
-    # Income Insight
-    if not income_df_month.empty:
-        active_income = income_df_month[income_df_month["income_type"] == "Active"]["amount"].sum()
-        passive_income = income_df_month[income_df_month["income_type"] == "Passive"]["amount"].sum()
-        active_pct = (active_income / total_income * 100) if total_income else 0
-        passive_pct = (passive_income / total_income * 100) if total_income else 0
-
-        st.subheader("Income Insight")
-        st.write(f"Active Income: ₦{active_income:,.0f} ({active_pct:.0f}%)")
-        st.write(f"Passive Income: ₦{passive_income:,.0f} ({passive_pct:.0f}%)")
-
-        if active_pct >= 70:
-            st.warning("Income is heavily effort-dependent. Increasing passive streams would improve resilience.")
-        elif passive_pct >= 50:
-            st.success("Healthy passive structure — income base is becoming resilient.")
-        else:
-            st.info("Income structure moderately balanced.")
-
-    st.divider()
-    # Expense Insight
-    if not expense_df_month.empty:
-        sorted_expense = expense_df_month.sort_values("amount", ascending=False)
-        top = sorted_expense.head(2)
-        st.subheader("Expense Insight")
-        if len(top) == 1:
-            row = top.iloc[0]
-            st.write(f"{row['category']} ({row['% of Total']}) is the largest cost driver.")
-        else:
-            categories_text = " and ".join([f"{row['category']} ({row['% of Total']})" for _, row in top.iterrows()])
-            st.write(f"{categories_text} are the largest cost drivers.")
-
-# ====================== ALLOCATION LOG ======================
+# ====================== ALLOCATION ======================
 st.divider()
-st.header("📂 Allocation Log")
+st.header("📂 Allocation")
 
-with st.expander("View / Manage Allocation Log", expanded=False):
-    if total_income == 0:
-        st.info("No income recorded — allocation cannot be calculated.")
-    elif net_surplus <= 0:
-        st.warning("No surplus available — allocation only works when Net Surplus is positive.")
-    else:
-        allocation_modes = {
-            "Default": {"Asset Building": 35, "Investing": 30, "Insurance": 10, "Savings": 5, "Emergency": 5, "Lifestyle": 10, "Charity": 5},
-            "Wealth Focus": {"Asset Building": 40, "Investing": 30, "Insurance": 10, "Savings": 5, "Emergency": 5, "Lifestyle": 5, "Charity": 5},
-            "Giving Focus": {"Asset Building": 25, "Investing": 20, "Insurance": 10, "Savings": 5, "Emergency": 5, "Lifestyle": 10, "Charity": 25},
-            "Savings / Security Focus": {"Asset Building": 20, "Investing": 15, "Insurance": 20, "Savings": 20, "Emergency": 15, "Lifestyle": 5, "Charity": 5},
-        }
+if total_income > 0 and net_surplus > 0:
 
-        mode = st.selectbox("Select Allocation Mode", list(allocation_modes.keys()))
-        allocation_list = []
-        for category, pct in allocation_modes[mode].items():
-            allocated_amount = round(net_surplus * pct / 100, 0)
-            allocation_list.append({"Category": category, "Percentage (%)": pct, "Allocated Amount (₦)": allocated_amount})
+    allocation_modes = {
+        "Default": {"Asset Building": 35, "Investing": 30, "Insurance": 10, "Savings": 5, "Emergency": 5, "Lifestyle": 10, "Charity": 5},
+        "Wealth Focus": {"Asset Building": 40, "Investing": 30, "Insurance": 10, "Savings": 5, "Emergency": 5, "Lifestyle": 5, "Charity": 5},
+        "Giving Focus": {"Asset Building": 25, "Investing": 20, "Insurance": 10, "Savings": 5, "Emergency": 5, "Lifestyle": 10, "Charity": 25},
+        "Security Focus": {"Asset Building": 20, "Investing": 15, "Insurance": 20, "Savings": 20, "Emergency": 15, "Lifestyle": 5, "Charity": 5},
+    }
 
-        allocation_df = pd.DataFrame(allocation_list)
-        st.dataframe(allocation_df, use_container_width=True)
+    mode = st.selectbox("Select Allocation Mode", list(allocation_modes.keys()))
+    allocation_list = []
 
-        if st.button("💾 Save Allocation for Month"):
+    for category, pct in allocation_modes[mode].items():
+        allocation_list.append({
+            "Category": category,
+            "Percentage (%)": pct,
+            "Allocated Amount (₦)": round(net_surplus * pct / 100, 0)
+        })
+
+    allocation_df_display = pd.DataFrame(allocation_list)
+    st.dataframe(allocation_df_display, use_container_width=True)
+
+    if st.button("💾 Save Allocation for Month"):
+
+        if not allocation_df.empty and current_month in allocation_df["month_year"].values:
+            st.warning("Allocation already saved for this month.")
+        else:
             for row in allocation_list:
                 append_row(
                     "Allocation_Log",
-                    [current_month, row["Category"], row["Percentage (%)"], row["Allocated Amount (₦)"]]
+                    [
+                        str(uuid.uuid4()),
+                        current_month,
+                        row["Category"],
+                        row["Percentage (%)"],
+                        row["Allocated Amount (₦)"]
+                    ]
                 )
-            st.success("Allocation saved to Google Sheet successfully.")
+            st.success("Allocation saved successfully.")
+else:
+    st.info("Allocation available only when surplus is positive.")
