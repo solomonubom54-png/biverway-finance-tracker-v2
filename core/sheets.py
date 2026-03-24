@@ -4,11 +4,12 @@ from google.oauth2.service_account import Credentials
 import pandas as pd
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+
 json_creds = st.secrets["gcp_service_account"]
 credentials = Credentials.from_service_account_info(json_creds, scopes=SCOPES)
 client = gspread.authorize(credentials)
 
-SHEET_ID = "1M84vmqH1Pz0kE197nH_reROOkWtwdcFXC5uqi0l31lI"
+SHEET_ID = "YOUR_NEW_SHEET_ID"  # replace after rotating key
 sheet = client.open_by_key(SHEET_ID)
 
 def append_row(sheet_name: str, row: list):
@@ -21,27 +22,28 @@ def append_row(sheet_name: str, row: list):
 def load_sheet(sheet_name: str, headers: list):
     try:
         worksheet = sheet.worksheet(sheet_name)
-        records = worksheet.get_all_records()
-        df = pd.DataFrame(records)
-
+        data = worksheet.get_all_records()
+        df = pd.DataFrame(data)
         for col in headers:
             if col not in df.columns:
                 df[col] = ""
-
         return df.to_dict(orient="records")
-
     except gspread.WorksheetNotFound:
         return []
 
-def delete_by_id(sheet_name: str, record_id: str):
+def delete_row(sheet_name: str, row_index: int):
     try:
         worksheet = sheet.worksheet(sheet_name)
-        records = worksheet.get_all_records()
-
-        for i, row in enumerate(records):
-            if str(row.get("id")) == str(record_id):
-                worksheet.delete_rows(i + 2)
-                break
-
+        worksheet.delete_rows(row_index)
     except Exception as e:
-        st.warning(f"Error deleting record: {e}")
+        st.warning(f"Delete failed: {e}")
+
+def clear_sheet(sheet_name: str):
+    try:
+        worksheet = sheet.worksheet(sheet_name)
+        headers = worksheet.row_values(1)
+        worksheet.clear()
+        if headers:
+            worksheet.append_row(headers)
+    except Exception as e:
+        st.warning(f"Clear failed: {e}")
