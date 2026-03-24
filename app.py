@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from core.sheets import append_row, load_sheet, delete_row, clear_sheet, clear_sheet_by_month
+from core.sheets import append_row, load_sheet, delete_row, clear_sheet_by_month
 
 # ====================== PAGE CONFIG ======================
 st.set_page_config(page_title="💎 Biverway Personal Finance Tracker", layout="wide")
@@ -71,19 +71,19 @@ if submit_income:
         [current_month, income_source, income_type_map[income_source], amount, notes]
     )
     st.success("Income added successfully.")
-    st.session_state.income_form_key += 1  # Reset form to defaults
+    st.session_state.income_form_key += 1
     st.rerun()
 
 st.subheader(f"📋 Income Records – {current_month}")
 
 if not income_df_month.empty:
-    st.dataframe(
-        income_df_month[["income_source", "income_type", "amount", "notes"]],
-        use_container_width=True
-    )
+    # Reset index so numbering starts from 0 for every month
+    display_income = income_df_month[["income_source", "income_type", "amount", "notes"]].reset_index(drop=True)
+    st.dataframe(display_income, use_container_width=True)
 
     if st.button("🗑 Clear All Income Records"):
-        clear_sheet("Income")
+        # Only clears current month's rows, not the entire sheet
+        clear_sheet_by_month("Income", current_month)
         st.rerun()
 
     for idx, row in income_df_month.iterrows():
@@ -115,7 +115,7 @@ with st.form(f"expense_form_{st.session_state.expense_form_key}"):
 if submit_expense:
     append_row("Expense", [current_month, category, expense_amount, description])
     st.success("Expense added successfully.")
-    st.session_state.expense_form_key += 1  # Reset form to defaults
+    st.session_state.expense_form_key += 1
     st.rerun()
 
 st.subheader(f"📋 Expense Records – {current_month}")
@@ -129,13 +129,13 @@ if not expense_df_month.empty:
     else:
         expense_df_month["% of Total"] = "0%"
 
-    st.dataframe(
-        expense_df_month[["category", "amount", "% of Total", "description"]],
-        use_container_width=True
-    )
+    # Reset index so numbering starts from 0 for every month
+    display_expense = expense_df_month[["category", "amount", "% of Total", "description"]].reset_index(drop=True)
+    st.dataframe(display_expense, use_container_width=True)
 
     if st.button("🗑 Clear All Expense Records"):
-        clear_sheet("Expense")
+        # Only clears current month's rows, not the entire sheet
+        clear_sheet_by_month("Expense", current_month)
         st.rerun()
 
     for idx, row in expense_df_month.iterrows():
@@ -238,7 +238,6 @@ with st.expander("View / Manage Allocation Log", expanded=False):
         st.dataframe(allocation_df, use_container_width=True)
 
         if st.button("💾 Save Allocation for Month"):
-            # Clear existing rows for this month before saving fresh data
             clear_sheet_by_month("Allocation_Log", current_month)
             for row in allocation_list:
                 append_row(
