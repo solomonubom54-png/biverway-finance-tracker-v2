@@ -1,4 +1,4 @@
-iimport streamlit as st
+import streamlit as st
 import pandas as pd
 from datetime import datetime
 from core.sheets import append_row, load_sheet, delete_row, clear_sheet
