@@ -53,3 +53,23 @@ def clear_sheet(sheet_name: str):
         st.warning(f"Worksheet '{sheet_name}' not found.")
     except Exception as e:
         st.warning(f"Unable to clear sheet '{sheet_name}': {e}")
+
+def clear_sheet_by_month(sheet_name: str, month_value: str):
+    """Delete all rows in the sheet where column A matches month_value."""
+    try:
+        worksheet = sheet.worksheet(sheet_name)
+        all_values = worksheet.get_all_values()
+        # Collect row indices to delete (1-based; skip header row at index 0)
+        rows_to_delete = [
+            i + 1
+            for i, row in enumerate(all_values)
+            if i > 0 and row and row[0] == month_value
+        ]
+        # Delete in reverse order to avoid row index shifting
+        for row_idx in reversed(rows_to_delete):
+            worksheet.delete_rows(row_idx)
+    except gspread.WorksheetNotFound:
+        pass  # Sheet doesn't exist yet, nothing to clear
+    except Exception as e:
+        st.warning(f"Unable to clear month data in '{sheet_name}': {e}")
+        
