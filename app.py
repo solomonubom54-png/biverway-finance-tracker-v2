@@ -1,13 +1,19 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from core.sheets import append_row, load_sheet, delete_row, clear_sheet
+from core.sheets import append_row, load_sheet, delete_row, clear_sheet, clear_sheet_by_month
 
 # ====================== PAGE CONFIG ======================
 st.set_page_config(page_title="💎 Biverway Personal Finance Tracker", layout="wide")
 st.title("💎 Biverway Personal Finance Tracker")
 st.markdown("Performance-Driven Financial Control")
 st.divider()
+
+# ====================== SESSION STATE FOR FORM RESET ======================
+if "income_form_key" not in st.session_state:
+    st.session_state.income_form_key = 0
+if "expense_form_key" not in st.session_state:
+    st.session_state.expense_form_key = 0
 
 # ====================== MONTH SELECTOR ======================
 st.header("📅 Select Working Month")
@@ -52,7 +58,7 @@ income_type_map = {
     "Rental": "Passive"
 }
 
-with st.form("income_form"):
+with st.form(f"income_form_{st.session_state.income_form_key}"):
     st.subheader("➕ Add New Income Entry")
     income_source = st.selectbox("Income Source", list(income_type_map.keys()))
     amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
@@ -65,6 +71,7 @@ if submit_income:
         [current_month, income_source, income_type_map[income_source], amount, notes]
     )
     st.success("Income added successfully.")
+    st.session_state.income_form_key += 1  # Reset form to defaults
     st.rerun()
 
 st.subheader(f"📋 Income Records – {current_month}")
@@ -98,7 +105,7 @@ expense_categories = [
     "Healthcare", "Education", "Subscription", "Family Support"
 ]
 
-with st.form("expense_form"):
+with st.form(f"expense_form_{st.session_state.expense_form_key}"):
     st.subheader("➕ Add New Expense Entry")
     category = st.selectbox("Category", expense_categories)
     expense_amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
@@ -108,6 +115,7 @@ with st.form("expense_form"):
 if submit_expense:
     append_row("Expense", [current_month, category, expense_amount, description])
     st.success("Expense added successfully.")
+    st.session_state.expense_form_key += 1  # Reset form to defaults
     st.rerun()
 
 st.subheader(f"📋 Expense Records – {current_month}")
@@ -230,6 +238,8 @@ with st.expander("View / Manage Allocation Log", expanded=False):
         st.dataframe(allocation_df, use_container_width=True)
 
         if st.button("💾 Save Allocation for Month"):
+            # Clear existing rows for this month before saving fresh data
+            clear_sheet_by_month("Allocation_Log", current_month)
             for row in allocation_list:
                 append_row(
                     "Allocation_Log",
