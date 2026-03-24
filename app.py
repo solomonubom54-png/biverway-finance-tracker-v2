@@ -118,15 +118,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     margin-bottom: 18px;
 }
 
-/* ── CARD ── */
-.bw-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px 22px 18px;
-    margin-bottom: 14px;
-}
-
 /* ── RESULTS TABLE ── */
 .bw-results-table {
     width: 100%;
@@ -244,33 +235,65 @@ input:focus, textarea:focus {
     box-shadow: 0 0 0 2px rgba(245,166,35,0.08) !important;
 }
 
-/* Select */
+/* ── SELECT TRIGGER BOX (the closed dropdown) ── */
 [data-baseweb="select"] > div {
     background: var(--bg3) !important;
     border: 1px solid var(--border) !important;
     border-radius: 10px !important;
-    color: #e8eaf0 !important;
     font-family: var(--font-mono) !important;
 }
-[data-baseweb="popover"] [role="listbox"] {
-    background: var(--bg2) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 10px !important;
+/* Selected value shown inside closed box — gold */
+[data-baseweb="select"] [data-testid="stSelectboxVirtualDropdown"] span,
+[data-baseweb="select"] > div > div > div,
+[data-baseweb="select"] > div span {
+    color: var(--amber) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.95rem !important;
 }
-[role="option"] {
-    background: transparent !important;
-    color: #e8eaf0 !important;
+
+/* ── DROPDOWN POPOVER & LIST ── */
+/* Popover container — keep white bg as browser renders it, control text */
+[data-baseweb="popover"],
+[data-baseweb="popover"] > div,
+[data-baseweb="menu"],
+ul[role="listbox"],
+[role="listbox"] {
+    background: #ffffff !important;
+    border: 1px solid #ddd !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18) !important;
+}
+
+/* All list options — black text so they're visible on white */
+[role="option"],
+[data-baseweb="menu"] li,
+[data-baseweb="popover"] li,
+ul[role="listbox"] li {
+    color: #111111 !important;
+    background: #ffffff !important;
     font-family: var(--font-mono) !important;
     font-size: 0.88rem !important;
+    padding: 10px 16px !important;
+    cursor: pointer !important;
 }
-[role="option"]:hover, [aria-selected="true"] {
-    background: rgba(245,166,35,0.1) !important;
+
+/* Hovered option — amber highlight */
+[role="option"]:hover,
+[data-baseweb="menu"] li:hover {
+    background: rgba(245,166,35,0.12) !important;
     color: var(--amber) !important;
 }
 
-/* Primary button → amber */
-[data-testid="baseButton-primary"],
-button[kind="primary"] {
+/* Selected / active option — gold text, light amber bg */
+[aria-selected="true"],
+[role="option"][aria-selected="true"] {
+    background: rgba(245,166,35,0.1) !important;
+    color: var(--amber) !important;
+    font-weight: 600 !important;
+}
+
+/* Form submit button */
+[data-testid="stFormSubmitButton"] button {
     background: var(--amber) !important;
     color: #0b0c10 !important;
     border: none !important;
@@ -280,12 +303,16 @@ button[kind="primary"] {
     font-weight: 700 !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
-    padding: 10px 28px !important;
+    width: 100% !important;
+    padding: 12px !important;
     transition: background 0.2s, transform 0.1s !important;
 }
-[data-testid="baseButton-primary"]:hover { background: var(--amber-dim) !important; transform: translateY(-1px); }
+[data-testid="stFormSubmitButton"] button:hover {
+    background: var(--amber-dim) !important;
+    transform: translateY(-1px);
+}
 
-/* Secondary / form submit */
+/* Secondary buttons */
 [data-testid="baseButton-secondary"],
 button[kind="secondary"] {
     background: var(--bg3) !important;
@@ -302,25 +329,6 @@ button[kind="secondary"] {
 [data-testid="baseButton-secondary"]:hover {
     border-color: var(--amber) !important;
     color: var(--amber) !important;
-}
-
-/* Form submit button specifically */
-[data-testid="stFormSubmitButton"] button {
-    background: var(--amber) !important;
-    color: #0b0c10 !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-family: var(--font-head) !important;
-    font-size: 1rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
-    width: 100% !important;
-    padding: 12px !important;
-}
-[data-testid="stFormSubmitButton"] button:hover {
-    background: var(--amber-dim) !important;
-    transform: translateY(-1px);
 }
 
 /* Expander */
@@ -363,16 +371,12 @@ button[kind="secondary"] {
     border-bottom: 1px solid rgba(255,255,255,0.04) !important;
 }
 
-/* Alert / info / success / warning / error boxes */
+/* Alert boxes */
 [data-testid="stAlert"] {
     border-radius: 10px !important;
     font-family: var(--font-mono) !important;
     font-size: 0.82rem !important;
 }
-[data-testid="stNotificationContentInfo"]    { background: rgba(220,233,240,0.06) !important; border-left-color: var(--ice) !important; }
-[data-testid="stNotificationContentSuccess"] { background: rgba(46,204,113,0.06) !important; border-left-color: var(--green) !important; }
-[data-testid="stNotificationContentWarning"] { background: rgba(240,192,64,0.06) !important; border-left-color: var(--yellow) !important; }
-[data-testid="stNotificationContentError"]   { background: rgba(231,76,60,0.06) !important; border-left-color: var(--red) !important; }
 
 /* Date input */
 [data-testid="stDateInput"] input {
@@ -547,7 +551,6 @@ savings_rate  = (net_surplus / total_income * 100) if total_income else 0
 
 with st.expander("VIEW PERFORMANCE DETAILS"):
 
-    # Metric grid
     st.markdown(f"""
     <div class="bw-metric-grid">
         <div class="bw-metric">
@@ -565,7 +568,6 @@ with st.expander("VIEW PERFORMANCE DETAILS"):
     </div>
     """, unsafe_allow_html=True)
 
-    # Savings insight
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin:20px 0 6px;">Savings Insight</p>', unsafe_allow_html=True)
 
     if total_income == 0:
@@ -581,7 +583,6 @@ with st.expander("VIEW PERFORMANCE DETAILS"):
             pill_cls, pill_txt = "red",    f"✕ {savings_rate:.1f}% — deficit, expenses exceed income"
         st.markdown(f'<span class="bw-pill {pill_cls}">{pill_txt}</span>', unsafe_allow_html=True)
 
-    # Income insight
     if not income_df_month.empty:
         active_income  = income_df_month[income_df_month["income_type"] == "Active"]["amount"].sum()
         passive_income = income_df_month[income_df_month["income_type"] == "Passive"]["amount"].sum()
@@ -603,7 +604,6 @@ with st.expander("VIEW PERFORMANCE DETAILS"):
         else:
             st.markdown('<span class="bw-pill yellow">Income structure moderately balanced</span>', unsafe_allow_html=True)
 
-    # Expense insight
     if not expense_df_month.empty:
         sorted_exp = expense_df_month.sort_values("amount", ascending=False)
         top = sorted_exp.head(2)
@@ -636,7 +636,6 @@ with st.expander("VIEW / MANAGE ALLOCATION"):
             for cat, pct in allocation_modes[mode].items()
         ]
 
-        # Render as styled table
         rows_alloc = "".join(
             f'<tr><td>{r["Category"]}</td><td>₦{r["Allocated Amount (₦)"]:,.0f} &nbsp;<span style="color:var(--muted);font-size:0.78rem">({r["Percentage (%)"]}%)</span></td></tr>'
             for r in allocation_list
@@ -650,7 +649,7 @@ with st.expander("VIEW / MANAGE ALLOCATION"):
             st.success("Allocation saved to Google Sheet.")
 
 # ====================== FOOTER ======================
-st.markdown(f"""
+st.markdown("""
 <div class="bw-footer">
     DESIGNED ACCORDING TO BIVERWAY TRADING SYSTEM &nbsp;·&nbsp; FINANCE OS V3.0
 </div>
