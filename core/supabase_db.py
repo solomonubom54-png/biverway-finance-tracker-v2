@@ -4,15 +4,15 @@ import streamlit as st
 SUPABASE_URL = st.secrets["supabase"]["url"]
 SUPABASE_KEY = st.secrets["supabase"]["anon_key"]
 
+client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 
 def get_client():
-    """Create a fresh client with the user's access token injected."""
+    """Always use anon key for client, but inject user JWT for RLS."""
     session = st.session_state.get("supabase_session")
     if session:
-        token = session.access_token
-        c = create_client(SUPABASE_URL, token)
-        return c
-    return create_client(SUPABASE_URL, SUPABASE_KEY)
+        client.postgrest.auth(session.access_token)
+    return client
 
 
 def get_user_id():
@@ -116,7 +116,3 @@ def save_allocation(month_year, allocation_list):
         get_client().table("allocation_log").insert(rows).execute()
     except Exception as e:
         st.error(f"Save allocation error: {str(e)}")
-
-
-# Keep client accessible for auth operations in app.py
-client = create_client(SUPABASE_URL, SUPABASE_KEY)
