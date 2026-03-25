@@ -8,7 +8,6 @@ client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 def get_client():
-    """Always use anon key for client, but inject user JWT for RLS."""
     session = st.session_state.get("supabase_session")
     if session:
         client.postgrest.auth(session.access_token)
@@ -26,7 +25,7 @@ def get_user_id():
 
 def add_income(month_year, source, income_type, amount, notes):
     try:
-        get_client().table("income").insert({
+        get_client().table("Income").insert({
             "user_id":     get_user_id(),
             "month_year":  month_year,
             "source":      source,
@@ -39,10 +38,9 @@ def add_income(month_year, source, income_type, amount, notes):
 
 def load_income(month_year):
     try:
-        res = get_client().table("income") \
+        res = get_client().table("Income") \
             .select("*") \
             .eq("month_year", month_year) \
-            .order("created_at") \
             .execute()
         return res.data or []
     except Exception as e:
@@ -51,13 +49,13 @@ def load_income(month_year):
 
 def delete_income(row_id):
     try:
-        get_client().table("income").delete().eq("id", row_id).execute()
+        get_client().table("Income").delete().eq("id", row_id).execute()
     except Exception as e:
         st.error(f"Delete income error: {str(e)}")
 
 def clear_income_month(month_year):
     try:
-        get_client().table("income").delete().eq("month_year", month_year).execute()
+        get_client().table("Income").delete().eq("month_year", month_year).execute()
     except Exception as e:
         st.error(f"Clear income error: {str(e)}")
 
@@ -81,7 +79,6 @@ def load_expense(month_year):
         res = get_client().table("expense") \
             .select("*") \
             .eq("month_year", month_year) \
-            .order("created_at") \
             .execute()
         return res.data or []
     except Exception as e:
