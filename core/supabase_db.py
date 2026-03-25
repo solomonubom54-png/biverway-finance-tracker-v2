@@ -25,7 +25,7 @@ def get_user_id():
 
 def add_income(month_year, source, income_type, amount, notes):
     try:
-        get_client().table("Income").insert({
+        get_client().table("income").insert({
             "user_id":     get_user_id(),
             "month_year":  month_year,
             "source":      source,
@@ -38,7 +38,7 @@ def add_income(month_year, source, income_type, amount, notes):
 
 def load_income(month_year):
     try:
-        res = get_client().table("Income") \
+        res = get_client().table("income") \
             .select("*") \
             .eq("month_year", month_year) \
             .execute()
@@ -49,13 +49,13 @@ def load_income(month_year):
 
 def delete_income(row_id):
     try:
-        get_client().table("Income").delete().eq("id", row_id).execute()
+        get_client().table("income").delete().eq("id", row_id).execute()
     except Exception as e:
         st.error(f"Delete income error: {str(e)}")
 
 def clear_income_month(month_year):
     try:
-        get_client().table("Income").delete().eq("month_year", month_year).execute()
+        get_client().table("income").delete().eq("month_year", month_year).execute()
     except Exception as e:
         st.error(f"Clear income error: {str(e)}")
 
