@@ -1,7 +1,12 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from core.sheets import append_row, load_sheet, delete_row, clear_sheet_by_month
+from core.supabase_db import (
+    client,
+    add_income, load_income, delete_income, clear_income_month,
+    add_expense, load_expense, delete_expense, clear_expense_month,
+    save_allocation
+)
 
 # ====================== PAGE CONFIG ======================
 st.set_page_config(page_title="Biverway | Finance OS", layout="wide")
@@ -11,7 +16,6 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
 
-/* ── ROOT TOKENS ── */
 :root {
     --bg:        #0b0c10;
     --bg2:       #13151c;
@@ -31,7 +35,6 @@ st.markdown("""
     --font-body: 'DM Sans', sans-serif;
 }
 
-/* ── BASE ── */
 html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: var(--bg) !important;
     color: #e8eaf0 !important;
@@ -48,12 +51,10 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 }
 .block-container { padding: 0 1.2rem 3rem !important; }
 
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--amber-dim); border-radius: 4px; }
 
-/* ── AMBER HERO BANNER ── */
 .bw-hero {
     background: var(--amber);
     border-radius: var(--radius);
@@ -83,7 +84,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     font-weight: 500;
 }
 
-/* ── SECTION HEADER (ice-blue pill) ── */
 .bw-section {
     background: var(--ice-bg);
     border: 1px solid rgba(220,233,240,0.13);
@@ -102,9 +102,7 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     color: var(--ice) !important;
     text-transform: uppercase;
 }
-.bw-section .bw-icon { font-size: 1.1rem; }
 
-/* ── MONTH BADGE ── */
 .bw-month-badge {
     display: inline-block;
     background: rgba(245,166,35,0.12);
@@ -118,7 +116,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     margin-bottom: 18px;
 }
 
-/* ── RESULTS TABLE ── */
 .bw-results-table {
     width: 100%;
     border-collapse: collapse;
@@ -126,14 +123,9 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     font-size: 0.9rem;
     margin-top: 6px;
 }
-.bw-results-table tr {
-    border-bottom: 1px solid var(--border);
-}
+.bw-results-table tr { border-bottom: 1px solid var(--border); }
 .bw-results-table tr:last-child { border-bottom: none; }
-.bw-results-table td {
-    padding: 12px 16px;
-    color: #c8ccd8;
-}
+.bw-results-table td { padding: 12px 16px; color: #c8ccd8; }
 .bw-results-table td:first-child {
     color: var(--muted);
     font-size: 0.78rem;
@@ -150,7 +142,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 }
 .bw-results-table tr:nth-child(odd) td { background: rgba(255,255,255,0.02); }
 
-/* ── METRIC GRID ── */
 .bw-metric-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -179,7 +170,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     line-height: 1;
 }
 
-/* ── STATUS PILL ── */
 .bw-pill {
     display: inline-block;
     padding: 5px 13px;
@@ -194,7 +184,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 .bw-pill.yellow { background: rgba(240,192,64,0.12); color: var(--yellow); border: 1px solid rgba(240,192,64,0.25); }
 .bw-pill.red    { background: rgba(231,76,60,0.12); color: var(--red); border: 1px solid rgba(231,76,60,0.25); }
 
-/* ── FOOTER ── */
 .bw-footer {
     text-align: center;
     font-size: 0.72rem;
@@ -206,12 +195,18 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     border-top: 1px solid var(--border);
 }
 
-/* ── STREAMLIT WIDGET OVERRIDES ── */
+/* Auth form styling */
+.bw-auth-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    max-width: 420px;
+    margin: 0 auto;
+}
 
-/* Labels */
 [data-testid="stWidgetLabel"] p,
-label, .stSelectbox label, .stNumberInput label,
-[data-baseweb="form-control-label"] {
+label, [data-baseweb="form-control-label"] {
     font-family: var(--font-mono) !important;
     font-size: 0.72rem !important;
     letter-spacing: 0.1em !important;
@@ -219,7 +214,6 @@ label, .stSelectbox label, .stNumberInput label,
     color: var(--muted) !important;
 }
 
-/* Inputs */
 input, textarea,
 [data-baseweb="input"] input,
 [data-baseweb="textarea"] textarea {
@@ -235,64 +229,32 @@ input:focus, textarea:focus {
     box-shadow: 0 0 0 2px rgba(245,166,35,0.08) !important;
 }
 
-/* ── SELECT TRIGGER BOX (the closed dropdown) ── */
 [data-baseweb="select"] > div {
     background: var(--bg3) !important;
     border: 1px solid var(--border) !important;
     border-radius: 10px !important;
     font-family: var(--font-mono) !important;
 }
-/* Selected value shown inside closed box — gold */
-[data-baseweb="select"] [data-testid="stSelectboxVirtualDropdown"] span,
-[data-baseweb="select"] > div > div > div,
-[data-baseweb="select"] > div span {
-    color: var(--amber) !important;
-    font-family: var(--font-mono) !important;
-    font-size: 0.95rem !important;
-}
+[data-baseweb="select"] > div span { color: var(--amber) !important; }
 
-/* ── DROPDOWN POPOVER & LIST ── */
-/* Popover container — keep white bg as browser renders it, control text */
 [data-baseweb="popover"],
-[data-baseweb="popover"] > div,
 [data-baseweb="menu"],
 ul[role="listbox"],
 [role="listbox"] {
     background: #ffffff !important;
     border: 1px solid #ddd !important;
     border-radius: 10px !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.18) !important;
 }
-
-/* All list options — black text so they're visible on white */
-[role="option"],
-[data-baseweb="menu"] li,
-[data-baseweb="popover"] li,
-ul[role="listbox"] li {
+[role="option"] {
     color: #111111 !important;
     background: #ffffff !important;
     font-family: var(--font-mono) !important;
     font-size: 0.88rem !important;
     padding: 10px 16px !important;
-    cursor: pointer !important;
 }
+[role="option"]:hover { background: rgba(245,166,35,0.12) !important; color: var(--amber) !important; }
+[aria-selected="true"] { background: rgba(245,166,35,0.1) !important; color: var(--amber) !important; font-weight: 600 !important; }
 
-/* Hovered option — amber highlight */
-[role="option"]:hover,
-[data-baseweb="menu"] li:hover {
-    background: rgba(245,166,35,0.12) !important;
-    color: var(--amber) !important;
-}
-
-/* Selected / active option — gold text, light amber bg */
-[aria-selected="true"],
-[role="option"][aria-selected="true"] {
-    background: rgba(245,166,35,0.1) !important;
-    color: var(--amber) !important;
-    font-weight: 600 !important;
-}
-
-/* Form submit button */
 [data-testid="stFormSubmitButton"] button {
     background: var(--amber) !important;
     color: #0b0c10 !important;
@@ -305,16 +267,10 @@ ul[role="listbox"] li {
     text-transform: uppercase !important;
     width: 100% !important;
     padding: 12px !important;
-    transition: background 0.2s, transform 0.1s !important;
 }
-[data-testid="stFormSubmitButton"] button:hover {
-    background: var(--amber-dim) !important;
-    transform: translateY(-1px);
-}
+[data-testid="stFormSubmitButton"] button:hover { background: var(--amber-dim) !important; }
 
-/* Secondary buttons */
-[data-testid="baseButton-secondary"],
-button[kind="secondary"] {
+[data-testid="baseButton-secondary"] {
     background: var(--bg3) !important;
     color: #e8eaf0 !important;
     border: 1px solid var(--border) !important;
@@ -324,14 +280,9 @@ button[kind="secondary"] {
     font-weight: 600 !important;
     letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
-    transition: border-color 0.2s, color 0.2s !important;
 }
-[data-testid="baseButton-secondary"]:hover {
-    border-color: var(--amber) !important;
-    color: var(--amber) !important;
-}
+[data-testid="baseButton-secondary"]:hover { border-color: var(--amber) !important; color: var(--amber) !important; }
 
-/* Expander */
 [data-testid="stExpander"] {
     background: var(--bg2) !important;
     border: 1px solid var(--border) !important;
@@ -347,51 +298,38 @@ button[kind="secondary"] {
     color: var(--ice) !important;
 }
 
-/* Dataframe */
 [data-testid="stDataFrame"] {
     border: 1px solid var(--border) !important;
     border-radius: var(--radius) !important;
     overflow: hidden !important;
 }
-[data-testid="stDataFrame"] table {
-    background: var(--bg2) !important;
-    font-family: var(--font-mono) !important;
-    font-size: 0.82rem !important;
-}
-[data-testid="stDataFrame"] th {
-    background: var(--bg3) !important;
-    color: var(--muted) !important;
-    font-size: 0.68rem !important;
+[data-testid="stDataFrame"] table { background: var(--bg2) !important; font-family: var(--font-mono) !important; font-size: 0.82rem !important; }
+[data-testid="stDataFrame"] th { background: var(--bg3) !important; color: var(--muted) !important; font-size: 0.68rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; border-bottom: 1px solid var(--border) !important; }
+[data-testid="stDataFrame"] td { color: #c8ccd8 !important; border-bottom: 1px solid rgba(255,255,255,0.04) !important; }
+
+[data-testid="stAlert"] { border-radius: 10px !important; font-family: var(--font-mono) !important; font-size: 0.82rem !important; }
+hr { border-color: var(--border) !important; margin: 24px 0 !important; }
+#MainMenu, footer, [data-testid="stStatusWidget"] { visibility: hidden !important; }
+
+/* Tab styling */
+[data-testid="stTabs"] [role="tab"] {
+    font-family: var(--font-head) !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
-    border-bottom: 1px solid var(--border) !important;
+    color: var(--muted) !important;
 }
-[data-testid="stDataFrame"] td {
-    color: #c8ccd8 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
+    color: var(--amber) !important;
+    border-bottom-color: var(--amber) !important;
 }
-
-/* Alert boxes */
-[data-testid="stAlert"] {
-    border-radius: 10px !important;
-    font-family: var(--font-mono) !important;
-    font-size: 0.82rem !important;
-}
-
-/* Date input */
-[data-testid="stDateInput"] input {
-    font-family: var(--font-mono) !important;
-}
-
-/* Divider */
-hr { border-color: var(--border) !important; margin: 24px 0 !important; }
-
-/* Hide streamlit branding */
-#MainMenu, footer, [data-testid="stStatusWidget"] { visibility: hidden !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # ====================== SESSION STATE ======================
+if "supabase_session" not in st.session_state:
+    st.session_state.supabase_session = None
 if "income_form_key" not in st.session_state:
     st.session_state.income_form_key = 0
 if "expense_form_key" not in st.session_state:
@@ -405,34 +343,68 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# ====================== AUTH WALL ======================
+if st.session_state.supabase_session is None:
+    tab1, tab2 = st.tabs(["LOG IN", "CREATE ACCOUNT"])
+
+    with tab1:
+        with st.form("login_form"):
+            email    = st.text_input("Email")
+            password = st.text_input("Password", type="password")
+            submit   = st.form_submit_button("Log In")
+        if submit:
+            try:
+                res = client.auth.sign_in_with_password({"email": email, "password": password})
+                if res.session:
+                    st.session_state.supabase_session = res.session
+                    st.rerun()
+                else:
+                    st.error("Invalid email or password.")
+            except Exception as e:
+                st.error(f"Login failed: {e}")
+
+    with tab2:
+        with st.form("signup_form"):
+            new_email    = st.text_input("Email")
+            new_password = st.text_input("Password", type="password")
+            submit_new   = st.form_submit_button("Create Account")
+        if submit_new:
+            try:
+                res = client.auth.sign_up({"email": new_email, "password": new_password})
+                st.success("Account created! Check your email to confirm, then log in.")
+            except Exception as e:
+                st.error(f"Sign up failed: {e}")
+
+    st.stop()
+
+# ====================== LOGGED IN — TOP BAR ======================
+user_email = st.session_state.supabase_session.user.email
+col_user, col_logout = st.columns([5, 1])
+with col_user:
+    st.markdown(f'<p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted);margin:0">● &nbsp;{user_email}</p>', unsafe_allow_html=True)
+with col_logout:
+    if st.button("Log Out"):
+        client.auth.sign_out()
+        st.session_state.supabase_session = None
+        st.rerun()
+
 # ====================== MONTH SELECTOR ======================
 st.markdown('<div class="bw-section"><span class="bw-icon">📅</span><span>Working Month</span></div>', unsafe_allow_html=True)
 working_month = st.date_input("", value=datetime.today(), label_visibility="collapsed")
 current_month = working_month.strftime("%b %Y")
 st.markdown(f'<div class="bw-month-badge">● &nbsp;{current_month}</div>', unsafe_allow_html=True)
 
-# ====================== HEADERS ======================
-income_headers  = ["month_year", "income_source", "income_type", "amount", "notes"]
-expense_headers = ["month_year", "category", "amount", "description"]
-
 # ====================== LOAD DATA ======================
-income_records  = load_sheet("Income",  income_headers)
-expense_records = load_sheet("Expense", expense_headers)
+income_records  = load_income(current_month)
+expense_records = load_expense(current_month)
 
-income_df  = pd.DataFrame(income_records)
-expense_df = pd.DataFrame(expense_records)
+income_df  = pd.DataFrame(income_records)  if income_records  else pd.DataFrame()
+expense_df = pd.DataFrame(expense_records) if expense_records else pd.DataFrame()
 
-for df, col in [(income_df, "month_year"), (expense_df, "month_year")]:
-    if col not in df.columns:
-        df[col] = ""
-
-income_df_month  = income_df[income_df["month_year"]  == current_month].copy()
-expense_df_month = expense_df[expense_df["month_year"] == current_month].copy()
-
-if not income_df_month.empty:
-    income_df_month["amount"] = pd.to_numeric(income_df_month["amount"], errors="coerce").fillna(0)
-if not expense_df_month.empty:
-    expense_df_month["amount"] = pd.to_numeric(expense_df_month["amount"], errors="coerce").fillna(0)
+if not income_df.empty:
+    income_df["amount"] = pd.to_numeric(income_df["amount"], errors="coerce").fillna(0)
+if not expense_df.empty:
+    expense_df["amount"] = pd.to_numeric(expense_df["amount"], errors="coerce").fillna(0)
 
 # ====================== INCOME TRACKER ======================
 st.markdown('<div class="bw-section"><span class="bw-icon">💰</span><span>Income Tracker</span></div>', unsafe_allow_html=True)
@@ -455,32 +427,30 @@ with st.form(f"income_form_{st.session_state.income_form_key}"):
     submit_income = st.form_submit_button("＋  Add Income")
 
 if submit_income:
-    append_row("Income", [current_month, income_source, income_type_map[income_source], amount, notes])
+    add_income(current_month, income_source, income_type_map[income_source], amount, notes)
     st.success("Income entry recorded.")
     st.session_state.income_form_key += 1
     st.rerun()
 
-if not income_df_month.empty:
+if not income_df.empty:
     st.markdown(f'<p style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin:18px 0 8px;">Records — {current_month}</p>', unsafe_allow_html=True)
-    display_income = income_df_month[["income_source", "income_type", "amount", "notes"]].reset_index(drop=True)
+    display_income = income_df[["source", "income_type", "amount", "notes"]].copy()
     display_income.columns = ["Source", "Type", "Amount (₦)", "Notes"]
+    display_income = display_income.reset_index(drop=True)
     st.dataframe(display_income, use_container_width=True)
 
     col_del, col_clr = st.columns([3, 1])
     with col_clr:
         if st.button("🗑 Clear Month", key="clr_inc"):
-            clear_sheet_by_month("Income", current_month)
+            clear_income_month(current_month)
             st.rerun()
     with col_del:
-        del_income_label = st.selectbox(
-            "Delete a row",
-            options=[f"{i}: {row['income_source']} — ₦{row['amount']:,.0f}" for i, (_, row) in enumerate(income_df_month.iterrows())],
-            key="del_inc_select"
-        )
+        options = [f"{i}: {row['source']} — ₦{row['amount']:,.0f}" for i, row in income_df.iterrows()]
+        del_income_label = st.selectbox("Delete a row", options=options, key="del_inc_select")
         if st.button("Delete Selected", key="del_inc_btn"):
             sel_idx = int(del_income_label.split(":")[0])
-            actual_idx = income_df_month.index[sel_idx]
-            delete_row("Income", actual_idx + 2)
+            row_id = income_df.iloc[sel_idx]["id"]
+            delete_income(row_id)
             st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.8rem;color:var(--muted);margin:12px 0;">No income entries for this month.</p>', unsafe_allow_html=True)
@@ -503,40 +473,38 @@ with st.form(f"expense_form_{st.session_state.expense_form_key}"):
     submit_expense = st.form_submit_button("＋  Add Expense")
 
 if submit_expense:
-    append_row("Expense", [current_month, category, expense_amount, description])
+    add_expense(current_month, category, expense_amount, description)
     st.success("Expense entry recorded.")
     st.session_state.expense_form_key += 1
     st.rerun()
 
-if not expense_df_month.empty:
-    total_expense = expense_df_month["amount"].sum()
+if not expense_df.empty:
+    total_expense = expense_df["amount"].sum()
     if total_expense > 0:
-        expense_df_month["% of Total"] = (
-            expense_df_month["amount"] / total_expense * 100
+        expense_df["% of Total"] = (
+            expense_df["amount"] / total_expense * 100
         ).round(0).astype(int).astype(str) + "%"
     else:
-        expense_df_month["% of Total"] = "0%"
+        expense_df["% of Total"] = "0%"
 
     st.markdown(f'<p style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin:18px 0 8px;">Records — {current_month}</p>', unsafe_allow_html=True)
-    display_expense = expense_df_month[["category", "amount", "% of Total", "description"]].reset_index(drop=True)
+    display_expense = expense_df[["category", "amount", "% of Total", "description"]].copy()
     display_expense.columns = ["Category", "Amount (₦)", "% of Total", "Description"]
+    display_expense = display_expense.reset_index(drop=True)
     st.dataframe(display_expense, use_container_width=True)
 
     col_del2, col_clr2 = st.columns([3, 1])
     with col_clr2:
         if st.button("🗑 Clear Month", key="clr_exp"):
-            clear_sheet_by_month("Expense", current_month)
+            clear_expense_month(current_month)
             st.rerun()
     with col_del2:
-        del_expense_label = st.selectbox(
-            "Delete a row",
-            options=[f"{i}: {row['category']} — ₦{row['amount']:,.0f}" for i, (_, row) in enumerate(expense_df_month.iterrows())],
-            key="del_exp_select"
-        )
+        options2 = [f"{i}: {row['category']} — ₦{row['amount']:,.0f}" for i, row in expense_df.iterrows()]
+        del_expense_label = st.selectbox("Delete a row", options=options2, key="del_exp_select")
         if st.button("Delete Selected", key="del_exp_btn"):
             sel_idx = int(del_expense_label.split(":")[0])
-            actual_idx = expense_df_month.index[sel_idx]
-            delete_row("Expense", actual_idx + 2)
+            row_id = expense_df.iloc[sel_idx]["id"]
+            delete_expense(row_id)
             st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.8rem;color:var(--muted);margin:12px 0;">No expense entries for this month.</p>', unsafe_allow_html=True)
@@ -544,13 +512,12 @@ else:
 # ====================== FINANCIAL PERFORMANCE ======================
 st.markdown('<div class="bw-section"><span class="bw-icon">📊</span><span>Financial Performance</span></div>', unsafe_allow_html=True)
 
-total_income  = income_df_month["amount"].sum()  if not income_df_month.empty  else 0
-total_expense = expense_df_month["amount"].sum() if not expense_df_month.empty else 0
+total_income  = income_df["amount"].sum()  if not income_df.empty  else 0
+total_expense = expense_df["amount"].sum() if not expense_df.empty else 0
 net_surplus   = total_income - total_expense
 savings_rate  = (net_surplus / total_income * 100) if total_income else 0
 
 with st.expander("VIEW PERFORMANCE DETAILS"):
-
     st.markdown(f"""
     <div class="bw-metric-grid">
         <div class="bw-metric">
@@ -569,7 +536,6 @@ with st.expander("VIEW PERFORMANCE DETAILS"):
     """, unsafe_allow_html=True)
 
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin:20px 0 6px;">Savings Insight</p>', unsafe_allow_html=True)
-
     if total_income == 0:
         st.error("No income recorded — financial performance cannot be evaluated.")
     else:
@@ -583,9 +549,9 @@ with st.expander("VIEW PERFORMANCE DETAILS"):
             pill_cls, pill_txt = "red",    f"✕ {savings_rate:.1f}% — deficit, expenses exceed income"
         st.markdown(f'<span class="bw-pill {pill_cls}">{pill_txt}</span>', unsafe_allow_html=True)
 
-    if not income_df_month.empty:
-        active_income  = income_df_month[income_df_month["income_type"] == "Active"]["amount"].sum()
-        passive_income = income_df_month[income_df_month["income_type"] == "Passive"]["amount"].sum()
+    if not income_df.empty:
+        active_income  = income_df[income_df["income_type"] == "Active"]["amount"].sum()
+        passive_income = income_df[income_df["income_type"] == "Passive"]["amount"].sum()
         active_pct  = (active_income  / total_income * 100) if total_income else 0
         passive_pct = (passive_income / total_income * 100) if total_income else 0
 
@@ -604,8 +570,8 @@ with st.expander("VIEW PERFORMANCE DETAILS"):
         else:
             st.markdown('<span class="bw-pill yellow">Income structure moderately balanced</span>', unsafe_allow_html=True)
 
-    if not expense_df_month.empty:
-        sorted_exp = expense_df_month.sort_values("amount", ascending=False)
+    if not expense_df.empty:
+        sorted_exp = expense_df.sort_values("amount", ascending=False)
         top = sorted_exp.head(2)
         st.markdown('<p style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin:20px 0 8px;">Top Cost Drivers</p>', unsafe_allow_html=True)
         rows_html = "".join(
@@ -643,10 +609,8 @@ with st.expander("VIEW / MANAGE ALLOCATION"):
         st.markdown(f'<table class="bw-results-table" style="margin-bottom:16px">{rows_alloc}</table>', unsafe_allow_html=True)
 
         if st.button("💾  Save Allocation for Month"):
-            clear_sheet_by_month("Allocation_Log", current_month)
-            for row in allocation_list:
-                append_row("Allocation_Log", [current_month, row["Category"], row["Percentage (%)"], row["Allocated Amount (₦)"]])
-            st.success("Allocation saved to Google Sheet.")
+            save_allocation(current_month, allocation_list)
+            st.success("Allocation saved successfully.")
 
 # ====================== FOOTER ======================
 st.markdown("""
