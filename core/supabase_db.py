@@ -36,12 +36,17 @@ def add_income(month_year, source, income_type, amount, notes):
     }).execute()
 
 def load_income(month_year):
-    res = get_client().table("income") \
-        .select("*") \
-        .eq("month_year", month_year) \
-        .order("created_at") \
-        .execute()
-    return res.data or []
+    try:
+        res = get_client().table("income") \
+            .select("*") \
+            .eq("month_year", month_year) \
+            .order("created_at") \
+            .execute()
+        return res.data or []
+    except Exception as e:
+        import streamlit as st
+        st.error(f"REAL ERROR: {str(e)}")
+        return []
 
 def delete_income(row_id):
     get_client().table("income").delete().eq("id", row_id).execute()
