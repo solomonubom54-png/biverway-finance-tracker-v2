@@ -195,16 +195,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     border-top: 1px solid var(--border);
 }
 
-/* Auth form styling */
-.bw-auth-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px 24px;
-    max-width: 420px;
-    margin: 0 auto;
-}
-
 [data-testid="stWidgetLabel"] p,
 label, [data-baseweb="form-control-label"] {
     font-family: var(--font-mono) !important;
@@ -311,7 +301,6 @@ ul[role="listbox"],
 hr { border-color: var(--border) !important; margin: 24px 0 !important; }
 #MainMenu, footer, [data-testid="stStatusWidget"] { visibility: hidden !important; }
 
-/* Tab styling */
 [data-testid="stTabs"] [role="tab"] {
     font-family: var(--font-head) !important;
     font-size: 0.95rem !important;
@@ -334,6 +323,8 @@ if "income_form_key" not in st.session_state:
     st.session_state.income_form_key = 0
 if "expense_form_key" not in st.session_state:
     st.session_state.expense_form_key = 0
+if "show_reset" not in st.session_state:
+    st.session_state.show_reset = False
 
 # ====================== HERO BANNER ======================
 st.markdown("""
@@ -345,6 +336,28 @@ st.markdown("""
 
 # ====================== AUTH WALL ======================
 if st.session_state.supabase_session is None:
+
+    # ── FORGOT PASSWORD SCREEN ──
+    if st.session_state.show_reset:
+        st.markdown('<div class="bw-section"><span>🔑</span><span>Reset Password</span></div>', unsafe_allow_html=True)
+        with st.form("reset_form"):
+            reset_email = st.text_input("Enter your email address")
+            submit_reset = st.form_submit_button("Send Reset Link")
+        if submit_reset:
+            try:
+                client.auth.reset_password_email(
+                    reset_email,
+                    options={"redirect_to": "https://biverway-finance-tracker-v2-3weeiriwgi5sqcczk3uuxd.streamlit.app"}
+                )
+                st.success("Password reset email sent. Check your inbox and follow the link.")
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+        if st.button("← Back to Login"):
+            st.session_state.show_reset = False
+            st.rerun()
+        st.stop()
+
+    # ── LOGIN / SIGNUP TABS ──
     tab1, tab2 = st.tabs(["LOG IN", "CREATE ACCOUNT"])
 
     with tab1:
@@ -361,19 +374,45 @@ if st.session_state.supabase_session is None:
                 else:
                     st.error("Invalid email or password.")
             except Exception as e:
-                st.error(f"Login failed: {e}")
+                err = str(e).lower()
+                if "invalid" in err or "credentials" in err:
+                    st.error("Incorrect email or password. Please try again.")
+                elif "email not confirmed" in err:
+                    st.warning("Please confirm your email before logging in. Check your inbox.")
+                else:
+                    st.error(f"Login failed: {e}")
+
+        # Forgot password link
+        if st.button("Forgot password?"):
+            st.session_state.show_reset = True
+            st.rerun()
 
     with tab2:
         with st.form("signup_form"):
             new_email    = st.text_input("Email")
-            new_password = st.text_input("Password", type="password")
+            new_password = st.text_input("Password (minimum 6 characters)", type="password")
             submit_new   = st.form_submit_button("Create Account")
         if submit_new:
             try:
-                res = client.auth.sign_up({"email": new_email, "password": new_password})
-                st.success("Account created! Check your email to confirm, then log in.")
+                if len(new_password) < 6:
+                    st.error("Password must be at least 6 characters.")
+                else:
+                    res = client.auth.sign_up({"email": new_email, "password": new_password})
+                    # Check if user already exists
+                    if res.user and res.user.identities is not None and len(res.user.identities) == 0:
+                        st.error("This email is already registered. Please log in instead.")
+                    else:
+                        st.success("Account created! Check your email to confirm, then log in.")
             except Exception as e:
-                st.error(f"Sign up failed: {e}")
+                err = str(e).lower()
+                if "already registered" in err or "already exists" in err or "duplicate" in err:
+                    st.error("This email is already registered. Please log in instead.")
+                elif "rate limit" in err:
+                    st.warning("Too many attempts. Please wait a few minutes and try again.")
+                else:
+                    st.error(f"Sign up failed: {e}")
+
+        st.markdown('<p style="font-family:var(--font-mono);font-size:0.72rem;color:var(--muted);margin-top:12px;">After signing up, check your email and click the confirmation link before logging in.</p>', unsafe_allow_html=True)
 
     st.stop()
 
