@@ -98,18 +98,27 @@ def clear_expense_month(month_year):
         st.error(f"Clear expense error: {str(e)}")
 
 
-# ── ALLOCATION LOG ───────────────────────────────────
+# ── LOCK MONTH ───────────────────────────────────────
 
-def save_allocation(month_year, allocation_list):
+def is_month_locked(month_year):
     try:
-        get_client().table("allocation_log").delete().eq("month_year", month_year).execute()
-        rows = [{
-            "user_id":          get_user_id(),
-            "month_year":       month_year,
-            "category":         r["Category"],
-            "percentage":       int(r["Percentage (%)"]),
-            "allocated_amount": float(r["Allocated Amount (₦)"])
-        } for r in allocation_list]
-        get_client().table("allocation_log").insert(rows).execute()
+        res = get_client().table("locked_months") \
+            .select("id") \
+            .eq("user_id", get_user_id()) \
+            .eq("month_year", month_year) \
+            .execute()
+        return len(res.data) > 0
+    except Exception:
+        return False
+
+def lock_month(month_year):
+    try:
+        get_client().table("locked_months").insert({
+            "user_id":    get_user_id(),
+            "month_year": month_year
+        }).execute()
+        return True
     except Exception as e:
-        st.error(f"Save allocation error: {str(e)}")
+        st.error(f"Lock error: {str(e)}")
+        return False
+                                                 
