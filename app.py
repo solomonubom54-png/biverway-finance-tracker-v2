@@ -43,16 +43,12 @@ st.markdown("""
     --font-mono:  'IBM Plex Mono', monospace;
 }
 
-html, body,
-[data-testid="stAppViewContainer"],
-[data-testid="stApp"] {
+html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: var(--bg-base) !important;
     color: var(--cream) !important;
     font-family: var(--font-disp) !important;
 }
-[data-testid="stHeader"],
-[data-testid="stToolbar"],
-[data-testid="stDecoration"] {
+[data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"] {
     background: var(--bg-base) !important;
     border-bottom: 1px solid var(--border) !important;
 }
@@ -67,126 +63,28 @@ html, body,
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
 
-.bw-masthead {
-    padding: 32px 0 22px;
-    border-bottom: 1px solid var(--gold-line);
-    margin-bottom: 28px;
-}
-.bw-masthead-label {
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 10px;
-    display: block;
-}
-.bw-masthead h1 {
-    font-family: var(--font-disp);
-    font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--white);
-    margin: 0 0 6px 0;
-    line-height: 1.1;
-    text-transform: uppercase;
-}
-.bw-masthead-sub {
-    font-size: 0.72rem;
-    color: var(--cream-mute);
-    font-weight: 300;
-    letter-spacing: 0.04em;
-}
+.bw-masthead { padding: 32px 0 22px; border-bottom: 1px solid var(--gold-line); margin-bottom: 28px; }
+.bw-masthead-label { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+.bw-masthead h1 { font-family: var(--font-disp); font-size: 1.75rem; font-weight: 700; letter-spacing: -0.01em; color: var(--white); margin: 0 0 6px 0; line-height: 1.1; text-transform: uppercase; }
+.bw-masthead-sub { font-size: 0.72rem; color: var(--cream-mute); font-weight: 300; letter-spacing: 0.04em; }
 
-.bw-section-label {
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--gold);
-    padding-bottom: 10px;
-    margin: 28px 0 14px 0;
-    border-bottom: 1px solid var(--gold-line);
-    display: block;
-}
+.bw-section-label { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); padding-bottom: 10px; margin: 28px 0 14px 0; border-bottom: 1px solid var(--gold-line); display: block; }
 
-.bw-month {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--gold-glow);
-    border: 1px solid var(--gold-line);
-    color: var(--gold);
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 5px 13px;
-    border-radius: 100px;
-    margin-bottom: 20px;
-}
+.bw-month { display: inline-flex; align-items: center; gap: 8px; background: var(--gold-glow); border: 1px solid var(--gold-line); color: var(--gold); font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 13px; border-radius: 100px; margin-bottom: 20px; }
 
-.bw-kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border-md);
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin: 0 0 20px 0;
-}
-.bw-kpi {
-    background: var(--bg-card);
-    padding: 16px 12px 14px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 82px;
-}
-.bw-kpi.highlight {
-    background: linear-gradient(160deg, #0d1017 55%, rgba(201,168,76,0.05) 100%);
-}
-.bw-kpi .kpi-label {
-    font-family: var(--font-mono);
-    font-size: 0.48rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--cream-mute);
-    margin-bottom: 8px;
-    display: block;
-    line-height: 1.6;
-}
-.bw-kpi .kpi-value {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--white);
-    line-height: 1;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+.bw-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border-md); border-radius: var(--radius); overflow: hidden; margin: 0 0 20px 0; }
+.bw-kpi { background: var(--bg-card); padding: 16px 12px 14px; display: flex; flex-direction: column; justify-content: space-between; min-height: 82px; }
+.bw-kpi.highlight { background: linear-gradient(160deg, #0d1017 55%, rgba(201,168,76,0.05) 100%); }
+.bw-kpi .kpi-label { font-family: var(--font-mono); font-size: 0.48rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-mute); margin-bottom: 8px; display: block; line-height: 1.6; }
+.bw-kpi .kpi-value { font-family: var(--font-mono); font-size: 0.82rem; font-weight: 500; color: var(--white); line-height: 1; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bw-kpi.highlight .kpi-value { font-size: 0.88rem; font-weight: 600; }
 .bw-kpi .kpi-value.positive { color: var(--green); }
 .bw-kpi .kpi-value.negative { color: var(--red); }
 
-.bw-status {
-    display: inline-flex;
-    align-items: flex-start;
-    gap: 9px;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.03em;
-    margin-top: 4px;
-    line-height: 1.5;
-}
+.bw-status { display: inline-flex; align-items: flex-start; gap: 9px; padding: 10px 14px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.03em; margin-top: 4px; line-height: 1.5; }
 .bw-status.green  { background: var(--green-bg); color: var(--green); border: 1px solid rgba(76,175,125,0.18); }
-.bw-status.yellow { background: var(--warn-bg);  color: var(--amber-warn); border: 1px solid rgba(212,146,42,0.18); }
-.bw-status.red    { background: var(--red-bg);   color: var(--red); border: 1px solid rgba(192,84,74,0.18); }
+.bw-status.yellow { background: var(--warn-bg); color: var(--amber-warn); border: 1px solid rgba(212,146,42,0.18); }
+.bw-status.red    { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,84,74,0.18); }
 .bw-status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; flex-shrink: 0; margin-top: 5px; }
 
 .bw-insight-row { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--border); }
@@ -222,16 +120,7 @@ html, body,
 .bw-footer { text-align: center; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-mute); margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); }
 
 /* STREAMLIT OVERRIDES */
-[data-testid="stWidgetLabel"] p,
-[data-baseweb="form-control-label"] {
-    font-family: var(--font-disp) !important;
-    font-size: 0.72rem !important;
-    letter-spacing: 0.02em !important;
-    text-transform: none !important;
-    color: var(--cream-dim) !important;
-    font-weight: 400 !important;
-    margin-bottom: 5px !important;
-}
+[data-testid="stWidgetLabel"] p, [data-baseweb="form-control-label"] { font-family: var(--font-disp) !important; font-size: 0.72rem !important; letter-spacing: 0.02em !important; text-transform: none !important; color: var(--cream-dim) !important; font-weight: 400 !important; margin-bottom: 5px !important; }
 [data-baseweb="input"] > div { background: var(--bg-input) !important; border: 1px solid var(--border-md) !important; border-radius: var(--radius-sm) !important; }
 [data-baseweb="input"] input { background: transparent !important; color: var(--white) !important; font-family: var(--font-mono) !important; font-size: 0.88rem !important; padding: 10px 14px !important; }
 [data-baseweb="input"]:focus-within > div { border-color: var(--gold-dim) !important; box-shadow: 0 0 0 3px var(--gold-glow) !important; }
@@ -242,48 +131,35 @@ html, body,
 [data-testid="stNumberInput"] button:hover { color: var(--gold) !important; background: var(--gold-glow) !important; }
 [data-baseweb="select"] > div { background: var(--bg-input) !important; border: 1px solid var(--border-md) !important; border-radius: var(--radius-sm) !important; }
 [data-baseweb="select"] > div > div > div, [data-baseweb="select"] > div span { color: var(--white) !important; font-family: var(--font-disp) !important; font-size: 0.85rem !important; }
-
-/* Dropdown — white bg, black text */
 [data-baseweb="popover"], [data-baseweb="menu"], ul[role="listbox"], [role="listbox"] { background: #ffffff !important; border: 1px solid #e0ddd8 !important; border-radius: var(--radius-sm) !important; box-shadow: 0 12px 40px rgba(0,0,0,0.35) !important; }
 [role="option"] { background: #ffffff !important; color: #1a1a1a !important; font-family: var(--font-disp) !important; font-size: 0.85rem !important; padding: 11px 16px !important; border-bottom: 1px solid #f0ede8 !important; cursor: pointer !important; }
 [role="option"]:last-child { border-bottom: none !important; }
 [role="option"]:hover { background: #fdf8f0 !important; color: #9a7a34 !important; }
 [aria-selected="true"] { background: #fdf3de !important; color: #9a7a34 !important; font-weight: 600 !important; }
-
 [data-testid="stDateInput"] > div { background: var(--bg-input) !important; border: 1px solid var(--border-md) !important; border-radius: var(--radius-sm) !important; }
 [data-testid="stDateInput"] input { background: transparent !important; color: var(--white) !important; font-family: var(--font-mono) !important; font-size: 0.85rem !important; }
-
-/* PRIMARY button — gold */
-[data-testid="stFormSubmitButton"] button { background: var(--gold) !important; color: #080a0e !important; border: none !important; border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.78rem !important; font-weight: 600 !important; letter-spacing: 0.04em !important; padding: 11px 28px !important; width: 100% !important; transition: background 0.2s, transform 0.1s !important; box-shadow: 0 2px 12px rgba(201,168,76,0.18) !important; }
+[data-testid="stFormSubmitButton"] button { background: var(--gold) !important; color: #080a0e !important; border: none !important; border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.78rem !important; font-weight: 600 !important; letter-spacing: 0.04em !important; padding: 11px 28px !important; width: 100% !important; transition: background 0.2s, transform 0.1s !important; }
 [data-testid="stFormSubmitButton"] button:hover { background: #d4b460 !important; transform: translateY(-1px) !important; }
-
-/* SECONDARY button — white bg, dark text */
-[data-testid="baseButton-secondary"] { background: #ffffff !important; color: #1a1a1a !important; border: 1px solid #d0ccc5 !important; border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.74rem !important; font-weight: 500 !important; letter-spacing: 0.02em !important; padding: 8px 18px !important; transition: all 0.15s !important; }
+[data-testid="baseButton-secondary"] { background: #ffffff !important; color: #1a1a1a !important; border: 1px solid #d0ccc5 !important; border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.74rem !important; font-weight: 500 !important; padding: 8px 18px !important; transition: all 0.15s !important; }
 [data-testid="baseButton-secondary"]:hover { background: #fdf8f0 !important; border-color: var(--gold-dim) !important; color: #9a7a34 !important; }
-
-/* Expanders */
 [data-testid="stExpander"] { background: var(--bg-card) !important; border: 1px solid var(--border-md) !important; border-radius: var(--radius) !important; margin-bottom: 8px !important; overflow: hidden !important; }
 [data-testid="stExpander"] > details > summary { background: var(--bg-elevated) !important; font-family: var(--font-disp) !important; font-size: 0.78rem !important; font-weight: 500 !important; color: var(--cream-dim) !important; padding: 13px 18px !important; border-bottom: 1px solid var(--border) !important; list-style: none !important; }
 [data-testid="stExpander"] > details[open] > summary { color: var(--gold) !important; border-bottom-color: var(--gold-line) !important; }
 [data-testid="stExpander"] > details > summary:hover { color: var(--gold) !important; }
 [data-testid="stExpanderToggleIcon"] { color: var(--gold-dim) !important; }
 [data-testid="stExpander"] > details > div { padding: 16px 18px 18px !important; background: var(--bg-card) !important; }
-
 [data-testid="stDataFrame"] { border: 1px solid var(--border-md) !important; border-radius: var(--radius-sm) !important; overflow: hidden !important; }
 [data-testid="stDataFrame"] table { background: var(--bg-card) !important; font-family: var(--font-mono) !important; font-size: 0.76rem !important; }
 [data-testid="stDataFrame"] th { background: var(--bg-elevated) !important; color: var(--cream-mute) !important; font-size: 0.54rem !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; border-bottom: 1px solid var(--border-md) !important; padding: 9px 12px !important; font-weight: 400 !important; }
 [data-testid="stDataFrame"] td { color: var(--cream-dim) !important; border-bottom: 1px solid var(--border) !important; padding: 9px 12px !important; }
-
 [data-testid="stTabs"] [role="tablist"] { border-bottom: 1px solid var(--border-md) !important; background: transparent !important; }
 [data-testid="stTabs"] [role="tab"] { font-family: var(--font-disp) !important; font-size: 0.75rem !important; font-weight: 400 !important; color: var(--cream-mute) !important; padding: 10px 20px !important; border-radius: 0 !important; border-bottom: 2px solid transparent !important; background: transparent !important; }
 [data-testid="stTabs"] [role="tab"][aria-selected="true"] { color: var(--gold) !important; border-bottom-color: var(--gold) !important; }
-
 [data-testid="stAlert"] { border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.76rem !important; border-left-width: 2px !important; }
 [data-testid="stNotificationContentInfo"]    { background: rgba(232,224,208,0.03) !important; border-left-color: var(--cream-mute) !important; }
 [data-testid="stNotificationContentSuccess"] { background: var(--green-bg) !important; border-left-color: var(--green) !important; }
 [data-testid="stNotificationContentWarning"] { background: var(--warn-bg) !important; border-left-color: var(--amber-warn) !important; }
 [data-testid="stNotificationContentError"]   { background: var(--red-bg) !important; border-left-color: var(--red) !important; }
-
 [data-testid="stHorizontalBlock"] { gap: 10px !important; }
 #MainMenu, footer, [data-testid="stStatusWidget"] { visibility: hidden !important; }
 hr { border-color: var(--border) !important; margin: 20px 0 !important; }
@@ -302,7 +178,7 @@ def short_month(dt): return dt.strftime("%b %Y")
 # ====================== MASTHEAD ======================
 st.markdown("""
 <div class="bw-masthead">
-    <span class="bw-masthead-label">Biverway &nbsp;·&nbsp; Private Finance</span>
+    <span class="bw-masthead-label">Biverway &nbsp;&middot;&nbsp; Private Finance</span>
     <h1>Biverway Financial OS</h1>
     <div class="bw-masthead-sub">Your personal wealth command center</div>
 </div>
@@ -325,7 +201,7 @@ if st.session_state.supabase_session is None:
                 st.success("Reset link sent — check your inbox.")
             except Exception as e:
                 st.error(f"Error: {str(e)}")
-        if st.button("← Back to Sign In"):
+        if st.button("Back to Sign In"):
             st.session_state.show_reset = False
             st.rerun()
         st.stop()
@@ -398,19 +274,19 @@ st.markdown('<span class="bw-section-label">Working Period</span>', unsafe_allow
 working_month      = st.date_input("", value=datetime.today(), label_visibility="collapsed")
 current_month      = short_month(working_month)
 current_month_full = full_month(working_month)
-st.markdown(f'<div class="bw-month"><span>▸</span>{current_month_full}</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="bw-month"><span>&#9658;</span>{current_month_full}</div>', unsafe_allow_html=True)
 
 # ====================== LOCK CHECK ======================
 month_locked = is_month_locked(current_month)
 if month_locked:
-    st.markdown(f'<div class="bw-lock-banner">🔒 &nbsp; {current_month_full} is locked — all records are permanently frozen</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="bw-lock-banner">&#128274; &nbsp; {current_month_full} is locked &mdash; all records are permanently frozen</div>', unsafe_allow_html=True)
 
 # ====================== LOAD DATA ======================
-income_records  = load_income(current_month)
-expense_records = load_expense(current_month)
+income_records  = load_income(current_month)   # raw list of dicts from Supabase
+expense_records = load_expense(current_month)  # raw list of dicts from Supabase
 
-income_df  = pd.DataFrame(income_records).reset_index(drop=True)  if income_records  else pd.DataFrame()
-expense_df = pd.DataFrame(expense_records).reset_index(drop=True) if expense_records else pd.DataFrame()
+income_df  = pd.DataFrame(income_records)  if income_records  else pd.DataFrame()
+expense_df = pd.DataFrame(expense_records) if expense_records else pd.DataFrame()
 
 if not income_df.empty:
     income_df["amount"] = pd.to_numeric(income_df["amount"], errors="coerce").fillna(0)
@@ -429,13 +305,13 @@ income_type_map = {
 }
 
 if not month_locked:
-    with st.expander("＋  Record Income Entry"):
+    with st.expander("+ Record Income Entry"):
         with st.form(f"income_form_{st.session_state.income_form_key}"):
             col_a, col_b = st.columns(2)
             with col_a:
                 income_source = st.selectbox("Source", list(income_type_map.keys()))
             with col_b:
-                amount = st.number_input("Amount (₦)", min_value=0.0, step=1000.0, format="%0.0f")
+                amount = st.number_input("Amount (N)", min_value=0.0, step=1000.0, format="%0.0f")
             notes = st.text_area("Notes", height=70, placeholder="Optional context...")
             submit_income = st.form_submit_button("Record Income")
         if submit_income:
@@ -446,14 +322,14 @@ if not month_locked:
 
 if not income_df.empty:
     rows_html = ""
-    for i, row in income_df.iterrows():
+    for _, row in income_df.iterrows():
         rows_html += f"""
         <div class="bw-record-row">
             <div class="rr-left">
                 <span class="rr-source">{row['source']}</span>
-                <span class="rr-meta">{row['income_type']} &nbsp;·&nbsp; {row.get('notes','') or '—'}</span>
+                <span class="rr-meta">{row['income_type']} &nbsp;&middot;&nbsp; {row.get('notes','') or '&mdash;'}</span>
             </div>
-            <span class="rr-amount">₦{row['amount']:,.0f}</span>
+            <span class="rr-amount">&#8358;{row['amount']:,.0f}</span>
         </div>"""
     st.markdown(f'<div class="bw-record-table">{rows_html}</div>', unsafe_allow_html=True)
 
@@ -464,13 +340,22 @@ if not income_df.empty:
                 clear_income_month(current_month)
                 st.rerun()
         with col_del:
-            inc_labels = [f"{i} · {row['source']} · ₦{row['amount']:,.0f}"
-                          for i, row in income_df.iterrows()]
-            del_inc = st.selectbox("Select entry to remove", options=inc_labels, key="del_inc_select")
+            # Build label -> id map directly from raw records (no pandas needed)
+            inc_map = {}
+            for rec in income_records:
+                amt = float(rec.get("amount", 0))
+                label = f"{rec['source']} — {rec.get('income_type','')} — N{amt:,.0f}"
+                # Make label unique if duplicates exist
+                base = label
+                count = 1
+                while label in inc_map:
+                    label = f"{base} ({count})"
+                    count += 1
+                inc_map[label] = rec["id"]
+
+            del_inc = st.selectbox("Select entry to remove", options=list(inc_map.keys()), key="del_inc_select")
             if st.button("Remove Income", key="del_inc_btn"):
-                sel_idx = int(del_inc.split(" · ")[0])
-                row_id = income_records[sel_idx]["id"]
-                delete_income(row_id)
+                delete_income(inc_map[del_inc])
                 st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No income entries for this period.</p>', unsafe_allow_html=True)
@@ -484,13 +369,13 @@ expense_categories = [
 ]
 
 if not month_locked:
-    with st.expander("＋  Record Expense Entry"):
+    with st.expander("+ Record Expense Entry"):
         with st.form(f"expense_form_{st.session_state.expense_form_key}"):
             col_c, col_d = st.columns(2)
             with col_c:
                 category = st.selectbox("Category", expense_categories)
             with col_d:
-                expense_amount = st.number_input("Amount (₦)", min_value=0.0, step=1000.0, format="%0.0f")
+                expense_amount = st.number_input("Amount (N)", min_value=0.0, step=1000.0, format="%0.0f")
             description = st.text_area("Description", height=70, placeholder="Optional context...")
             submit_expense = st.form_submit_button("Record Expense")
         if submit_expense:
@@ -502,15 +387,15 @@ if not month_locked:
 if not expense_df.empty:
     total_expense = expense_df["amount"].sum()
     rows_html2 = ""
-    for i, row in expense_df.iterrows():
-        share = f"{row['amount']/total_expense*100:.0f}%" if total_expense > 0 else "—"
+    for _, row in expense_df.iterrows():
+        share = f"{row['amount']/total_expense*100:.0f}%" if total_expense > 0 else "0%"
         rows_html2 += f"""
         <div class="bw-record-row">
             <div class="rr-left">
                 <span class="rr-source">{row['category']}</span>
-                <span class="rr-meta">{share} of total &nbsp;·&nbsp; {row.get('description','') or '—'}</span>
+                <span class="rr-meta">{share} of total &nbsp;&middot;&nbsp; {row.get('description','') or '&mdash;'}</span>
             </div>
-            <span class="rr-amount">₦{row['amount']:,.0f}</span>
+            <span class="rr-amount">&#8358;{row['amount']:,.0f}</span>
         </div>"""
     st.markdown(f'<div class="bw-record-table">{rows_html2}</div>', unsafe_allow_html=True)
 
@@ -521,13 +406,21 @@ if not expense_df.empty:
                 clear_expense_month(current_month)
                 st.rerun()
         with col_del2:
-            exp_labels = [f"{i} · {row['category']} · ₦{row['amount']:,.0f}"
-                          for i, row in expense_df.iterrows()]
-            del_exp = st.selectbox("Select entry to remove", options=exp_labels, key="del_exp_select")
+            # Build label -> id map directly from raw records (no pandas needed)
+            exp_map = {}
+            for rec in expense_records:
+                amt = float(rec.get("amount", 0))
+                label = f"{rec['category']} — N{amt:,.0f}"
+                base = label
+                count = 1
+                while label in exp_map:
+                    label = f"{base} ({count})"
+                    count += 1
+                exp_map[label] = rec["id"]
+
+            del_exp = st.selectbox("Select entry to remove", options=list(exp_map.keys()), key="del_exp_select")
             if st.button("Remove Expense", key="del_exp_btn"):
-                sel_idx = int(del_exp.split(" · ")[0])
-                row_id = expense_records[sel_idx]["id"]
-                delete_expense(row_id)
+                delete_expense(exp_map[del_exp])
                 st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No expense entries for this period.</p>', unsafe_allow_html=True)
@@ -545,15 +438,15 @@ st.markdown(f"""
 <div class="bw-kpi-grid">
     <div class="bw-kpi">
         <span class="kpi-label">Total<br>Income</span>
-        <span class="kpi-value">₦{total_income:,.0f}</span>
+        <span class="kpi-value">&#8358;{total_income:,.0f}</span>
     </div>
     <div class="bw-kpi">
         <span class="kpi-label">Total<br>Expenses</span>
-        <span class="kpi-value">₦{total_expense:,.0f}</span>
+        <span class="kpi-value">&#8358;{total_expense:,.0f}</span>
     </div>
     <div class="bw-kpi highlight">
         <span class="kpi-label">Net<br>Surplus</span>
-        <span class="kpi-value {surplus_cls}">₦{net_surplus:,.0f}</span>
+        <span class="kpi-value {surplus_cls}">&#8358;{net_surplus:,.0f}</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -569,7 +462,7 @@ with st.expander("Performance Analysis"):
         elif 1 <= savings_rate < 15:
             s_cls, s_txt = "yellow", f"Savings rate {savings_rate:.1f}% — margin is thin"
         else:
-            s_cls, s_txt = "red",    f"Deficit — expenses exceed income by ₦{abs(net_surplus):,.0f}"
+            s_cls, s_txt = "red",    f"Deficit — expenses exceed income by N{abs(net_surplus):,.0f}"
 
         st.markdown(f'<div class="bw-status {s_cls}"><span class="bw-status-dot"></span>{s_txt}</div>', unsafe_allow_html=True)
 
@@ -595,11 +488,11 @@ with st.expander("Performance Analysis"):
             <div>
                 <div class="bw-insight-row">
                     <span class="ir-label">Active Income</span>
-                    <span class="ir-value">₦{active_income:,.0f}<span class="ir-sub">{active_pct:.0f}%</span></span>
+                    <span class="ir-value">&#8358;{active_income:,.0f}<span class="ir-sub">{active_pct:.0f}%</span></span>
                 </div>
                 <div class="bw-insight-row">
                     <span class="ir-label">Passive Income</span>
-                    <span class="ir-value">₦{passive_income:,.0f}<span class="ir-sub">{passive_pct:.0f}%</span></span>
+                    <span class="ir-value">&#8358;{passive_income:,.0f}<span class="ir-sub">{passive_pct:.0f}%</span></span>
                 </div>
             </div>
             <div style="margin:14px 0 18px;">
@@ -623,11 +516,11 @@ with st.expander("Performance Analysis"):
             st.markdown('<p style="font-family:var(--font-disp);font-size:0.72rem;color:var(--cream-mute);margin:20px 0 8px;">Top Cost Drivers</p>', unsafe_allow_html=True)
             rows = ""
             for _, row in sorted_exp.iterrows():
-                share = f"{row['amount']/total_expense*100:.0f}%" if total_expense > 0 else "—"
+                share = f"{row['amount']/total_expense*100:.0f}%" if total_expense > 0 else "0%"
                 rows += f"""
                 <div class="bw-insight-row">
                     <span class="ir-label">{row['category']}</span>
-                    <span class="ir-value">₦{row['amount']:,.0f}<span class="ir-sub">{share}</span></span>
+                    <span class="ir-value">&#8358;{row['amount']:,.0f}<span class="ir-sub">{share}</span></span>
                 </div>"""
             st.markdown(f'<div>{rows}</div>', unsafe_allow_html=True)
 
@@ -653,7 +546,7 @@ with st.expander("Allocation Planner"):
             for cat, pct in allocation_modes[mode].items()
         ]
 
-        st.markdown('<p style="font-family:var(--font-disp);font-size:0.7rem;color:var(--cream-mute);margin:14px 0 10px;">Allocation Breakdown &nbsp;·&nbsp; Live calculation from current surplus</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-family:var(--font-disp);font-size:0.7rem;color:var(--cream-mute);margin:14px 0 10px;">Allocation Breakdown &nbsp;&middot;&nbsp; Live calculation from current surplus</p>', unsafe_allow_html=True)
 
         alloc_rows = ""
         for r in allocation_list:
@@ -661,7 +554,7 @@ with st.expander("Allocation Planner"):
             <div class="bw-alloc-row">
                 <span class="ar-cat">{r['Category']}</span>
                 <span class="ar-pct">{r['Pct']}%</span>
-                <span class="ar-amt">₦{r['Amount']:,.0f}</span>
+                <span class="ar-amt">&#8358;{r['Amount']:,.0f}</span>
             </div>"""
         st.markdown(f'<div class="bw-alloc-wrap">{alloc_rows}</div>', unsafe_allow_html=True)
         st.markdown('<p style="font-family:var(--font-disp);font-size:0.67rem;color:var(--cream-mute);line-height:1.6;">Allocation updates automatically as income and expenses change. Lock the month below to permanently record this period.</p>', unsafe_allow_html=True)
@@ -670,7 +563,7 @@ with st.expander("Allocation Planner"):
 st.markdown('<span class="bw-section-label">Period Control</span>', unsafe_allow_html=True)
 
 if month_locked:
-    st.markdown(f'<div class="bw-lock-banner">🔒 &nbsp; {current_month_full} is permanently locked. All records are frozen and cannot be altered.</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="bw-lock-banner">&#128274; &nbsp; {current_month_full} is permanently locked. All records are frozen.</div>', unsafe_allow_html=True)
 else:
     with st.expander(f"Lock {current_month_full}"):
         st.markdown(f"""
@@ -683,7 +576,7 @@ else:
         """, unsafe_allow_html=True)
         col_lock, col_space = st.columns([1, 2])
         with col_lock:
-            if st.button(f"🔒 Lock {current_month_full}", key="lock_btn"):
+            if st.button(f"Lock {current_month_full}", key="lock_btn"):
                 if lock_month(current_month):
                     st.success(f"{current_month_full} has been permanently locked.")
                     st.rerun()
