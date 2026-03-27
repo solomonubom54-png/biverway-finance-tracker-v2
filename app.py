@@ -691,6 +691,9 @@ else:
                     st.rerun()
 
 # ====================== FOOTER ======================
+year = datetime.today().year
 st.markdown(f"""
 <div class="bw-footer">
-    Biverway Financial OS &nbsp;·&nbsp; Built on the Biverway Wealth System &nbsp;·&nbsp; {datetim
+    Biverway Financial OS &nbsp;&middot;&nbsp; Built on the Biverway Wealth System &nbsp;&middot;&nbsp; {year}
+</div>
+""", unsafe_allow_html=True)
