@@ -355,7 +355,7 @@ if st.session_state.supabase_session is None:
             st.session_state.show_reset = True
             st.rerun()
 
-        with tab2:
+    with tab2:
         with st.form("signup_form"):
             new_email    = st.text_input("Email")
             new_password = st.text_input("Password", type="password")
@@ -693,6 +693,4 @@ else:
 # ====================== FOOTER ======================
 st.markdown(f"""
 <div class="bw-footer">
-    Biverway Financial OS &nbsp;·&nbsp; Built on the Biverway Wealth System &nbsp;·&nbsp; {datetime.today().year}
-</div>
-""", unsafe_allow_html=True)
+    Biverway Financial OS &nbsp;·&nbsp; Built on the Biverway Wealth System &nbsp;·&nbsp; {datetim
