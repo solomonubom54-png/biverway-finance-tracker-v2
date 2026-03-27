@@ -129,7 +129,7 @@ html, body,
     margin-bottom: 20px;
 }
 
-/* ── KPI GRID — refined alignment ── */
+/* ── KPI GRID — fixed alignment, reduced font ── */
 .bw-kpi-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -142,36 +142,38 @@ html, body,
 }
 .bw-kpi {
     background: var(--bg-card);
-    padding: 20px 16px 18px;
+    padding: 16px 12px 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 90px;
+    min-height: 82px;
 }
 .bw-kpi.highlight {
-    background: linear-gradient(160deg, #0d1017 60%, rgba(201,168,76,0.04) 100%);
+    background: linear-gradient(160deg, #0d1017 55%, rgba(201,168,76,0.05) 100%);
 }
 .bw-kpi .kpi-label {
     font-family: var(--font-mono);
-    font-size: 0.52rem;
-    letter-spacing: 0.14em;
+    font-size: 0.48rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--cream-mute);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     display: block;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 .bw-kpi .kpi-value {
     font-family: var(--font-mono);
-    font-size: 1rem;
+    font-size: 0.82rem;
     font-weight: 500;
     color: var(--white);
     line-height: 1;
     display: block;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .bw-kpi.highlight .kpi-value {
-    font-size: 1.08rem;
+    font-size: 0.88rem;
     font-weight: 600;
 }
 .bw-kpi .kpi-value.positive { color: var(--green); }
@@ -211,53 +213,17 @@ html, body,
     border-bottom: 1px solid var(--border);
 }
 .bw-insight-row:last-child { border-bottom: none; }
-.bw-insight-row .ir-label {
-    font-size: 0.78rem;
-    color: var(--cream-dim);
-    font-weight: 400;
-}
-.bw-insight-row .ir-value {
-    font-family: var(--font-mono);
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: var(--white);
-}
-.bw-insight-row .ir-sub {
-    font-size: 0.62rem;
-    color: var(--cream-mute);
-    margin-left: 7px;
-}
+.bw-insight-row .ir-label { font-size: 0.78rem; color: var(--cream-dim); font-weight: 400; }
+.bw-insight-row .ir-value { font-family: var(--font-mono); font-size: 0.88rem; font-weight: 500; color: var(--white); }
+.bw-insight-row .ir-sub { font-size: 0.62rem; color: var(--cream-mute); margin-left: 7px; }
 
 /* ── PROGRESS BAR ── */
-.bw-bar-wrap {
-    width: 100%;
-    height: 1px;
-    background: var(--border-md);
-    border-radius: 1px;
-    margin-top: 6px;
-    overflow: hidden;
-}
-.bw-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
-    border-radius: 1px;
-}
+.bw-bar-wrap { width: 100%; height: 1px; background: var(--border-md); border-radius: 1px; margin-top: 6px; overflow: hidden; }
+.bw-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius: 1px; }
 
 /* ── RECORD CARD ROWS ── */
-.bw-record-table {
-    border: 1px solid var(--border-md);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    margin-bottom: 14px;
-}
-.bw-record-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 13px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-card);
-}
+.bw-record-table { border: 1px solid var(--border-md); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 14px; }
+.bw-record-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--border); background: var(--bg-card); }
 .bw-record-row:last-child { border-bottom: none; }
 .bw-record-row .rr-left { display: flex; flex-direction: column; gap: 3px; }
 .bw-record-row .rr-source { font-size: 0.82rem; font-weight: 500; color: var(--white); }
@@ -265,75 +231,23 @@ html, body,
 .bw-record-row .rr-amount { font-family: var(--font-mono); font-size: 0.92rem; font-weight: 500; color: var(--white); }
 
 /* ── ALLOC ROWS ── */
-.bw-alloc-wrap {
-    border: 1px solid var(--border-md);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    margin: 14px 0 16px;
-}
-.bw-alloc-row {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-card);
-}
+.bw-alloc-wrap { border: 1px solid var(--border-md); border-radius: var(--radius-sm); overflow: hidden; margin: 14px 0 16px; }
+.bw-alloc-row { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg-card); }
 .bw-alloc-row:last-child { border-bottom: none; }
 .bw-alloc-row .ar-cat { flex: 1; font-size: 0.8rem; color: var(--cream-dim); }
 .bw-alloc-row .ar-pct { font-family: var(--font-mono); font-size: 0.63rem; color: var(--gold); letter-spacing: 0.05em; width: 38px; text-align: center; }
 .bw-alloc-row .ar-amt { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; color: var(--white); text-align: right; min-width: 96px; }
 
 /* ── LOCK BANNER ── */
-.bw-lock-banner {
-    background: rgba(201,168,76,0.05);
-    border: 1px solid var(--gold-line);
-    border-radius: var(--radius-sm);
-    padding: 11px 16px;
-    margin-bottom: 16px;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.05em;
-    color: var(--gold);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+.bw-lock-banner { background: rgba(201,168,76,0.05); border: 1px solid var(--gold-line); border-radius: var(--radius-sm); padding: 11px 16px; margin-bottom: 16px; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.05em; color: var(--gold); display: flex; align-items: center; gap: 10px; }
 
 /* ── USER BAR ── */
-.bw-userbar {
-    padding: 10px 0 18px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
-}
-.bw-ub-email {
-    font-family: var(--font-mono);
-    font-size: 0.63rem;
-    color: var(--cream-mute);
-    letter-spacing: 0.05em;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.bw-ub-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    display: inline-block;
-    flex-shrink: 0;
-}
+.bw-userbar { padding: 10px 0 18px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.bw-ub-email { font-family: var(--font-mono); font-size: 0.63rem; color: var(--cream-mute); letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; }
+.bw-ub-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; flex-shrink: 0; }
 
 /* ── FOOTER ── */
-.bw-footer {
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--cream-mute);
-    margin-top: 48px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-}
+.bw-footer { text-align: center; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-mute); margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); }
 
 /* ════════════ STREAMLIT OVERRIDES ════════════ */
 
@@ -413,33 +327,34 @@ html, body,
     font-size: 0.85rem !important;
 }
 
-/* Dropdown list — DARK */
+/* ── DROPDOWN LIST — white bg, black text ── */
 [data-baseweb="popover"],
 [data-baseweb="menu"],
 ul[role="listbox"],
 [role="listbox"] {
-    background: #141820 !important;
-    border: 1px solid var(--border-md) !important;
+    background: #ffffff !important;
+    border: 1px solid #e0ddd8 !important;
     border-radius: var(--radius-sm) !important;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.7) !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35) !important;
 }
 [role="option"] {
-    background: transparent !important;
-    color: var(--cream-dim) !important;
+    background: #ffffff !important;
+    color: #1a1a1a !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.82rem !important;
+    font-size: 0.85rem !important;
     padding: 11px 16px !important;
-    border-bottom: 1px solid var(--border) !important;
+    border-bottom: 1px solid #f0ede8 !important;
     cursor: pointer !important;
 }
 [role="option"]:last-child { border-bottom: none !important; }
 [role="option"]:hover {
-    background: var(--gold-glow) !important;
-    color: var(--gold) !important;
+    background: #fdf8f0 !important;
+    color: #9a7a34 !important;
 }
 [aria-selected="true"] {
-    background: rgba(201,168,76,0.1) !important;
-    color: var(--gold) !important;
+    background: #fdf3de !important;
+    color: #9a7a34 !important;
+    font-weight: 600 !important;
 }
 
 /* Date input */
@@ -457,7 +372,7 @@ ul[role="listbox"],
 
 /* ── BUTTON SYSTEM ── */
 
-/* PRIMARY — Gold (form submit) */
+/* PRIMARY — Gold fill (form submit) */
 [data-testid="stFormSubmitButton"] button {
     background: var(--gold) !important;
     color: #080a0e !important;
@@ -476,27 +391,24 @@ ul[role="listbox"],
     background: #d4b460 !important;
     transform: translateY(-1px) !important;
 }
-[data-testid="stFormSubmitButton"] button:active {
-    transform: translateY(0) !important;
-}
 
-/* SECONDARY — Dark elevated, outlined */
+/* SECONDARY — White bg, dark text, clearly visible */
 [data-testid="baseButton-secondary"] {
-    background: var(--bg-elevated) !important;
-    color: var(--cream-dim) !important;
-    border: 1px solid var(--border-md) !important;
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    border: 1px solid #d0ccc5 !important;
     border-radius: var(--radius-sm) !important;
     font-family: var(--font-disp) !important;
     font-size: 0.74rem !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
     padding: 8px 18px !important;
-    transition: all 0.2s !important;
+    transition: all 0.15s !important;
 }
 [data-testid="baseButton-secondary"]:hover {
+    background: #fdf8f0 !important;
     border-color: var(--gold-dim) !important;
-    color: var(--gold) !important;
-    background: var(--gold-glow) !important;
+    color: #9a7a34 !important;
 }
 
 /* ── EXPANDERS — fully dark ── */
@@ -522,9 +434,7 @@ ul[role="listbox"],
     color: var(--gold) !important;
     border-bottom-color: var(--gold-line) !important;
 }
-[data-testid="stExpander"] > details > summary:hover {
-    color: var(--gold) !important;
-}
+[data-testid="stExpander"] > details > summary:hover { color: var(--gold) !important; }
 [data-testid="stExpanderToggleIcon"] { color: var(--gold-dim) !important; }
 [data-testid="stExpander"] > details > div {
     padding: 16px 18px 18px !important;
@@ -532,60 +442,18 @@ ul[role="listbox"],
 }
 
 /* Dataframe */
-[data-testid="stDataFrame"] {
-    border: 1px solid var(--border-md) !important;
-    border-radius: var(--radius-sm) !important;
-    overflow: hidden !important;
-}
-[data-testid="stDataFrame"] table {
-    background: var(--bg-card) !important;
-    font-family: var(--font-mono) !important;
-    font-size: 0.76rem !important;
-}
-[data-testid="stDataFrame"] th {
-    background: var(--bg-elevated) !important;
-    color: var(--cream-mute) !important;
-    font-size: 0.54rem !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
-    border-bottom: 1px solid var(--border-md) !important;
-    padding: 9px 12px !important;
-    font-weight: 400 !important;
-}
-[data-testid="stDataFrame"] td {
-    color: var(--cream-dim) !important;
-    border-bottom: 1px solid var(--border) !important;
-    padding: 9px 12px !important;
-}
+[data-testid="stDataFrame"] { border: 1px solid var(--border-md) !important; border-radius: var(--radius-sm) !important; overflow: hidden !important; }
+[data-testid="stDataFrame"] table { background: var(--bg-card) !important; font-family: var(--font-mono) !important; font-size: 0.76rem !important; }
+[data-testid="stDataFrame"] th { background: var(--bg-elevated) !important; color: var(--cream-mute) !important; font-size: 0.54rem !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; border-bottom: 1px solid var(--border-md) !important; padding: 9px 12px !important; font-weight: 400 !important; }
+[data-testid="stDataFrame"] td { color: var(--cream-dim) !important; border-bottom: 1px solid var(--border) !important; padding: 9px 12px !important; }
 
 /* Tabs */
-[data-testid="stTabs"] [role="tablist"] {
-    border-bottom: 1px solid var(--border-md) !important;
-    background: transparent !important;
-}
-[data-testid="stTabs"] [role="tab"] {
-    font-family: var(--font-disp) !important;
-    font-size: 0.75rem !important;
-    font-weight: 400 !important;
-    letter-spacing: 0.03em !important;
-    color: var(--cream-mute) !important;
-    padding: 10px 20px !important;
-    border-radius: 0 !important;
-    border-bottom: 2px solid transparent !important;
-    background: transparent !important;
-}
-[data-testid="stTabs"] [role="tab"][aria-selected="true"] {
-    color: var(--gold) !important;
-    border-bottom-color: var(--gold) !important;
-}
+[data-testid="stTabs"] [role="tablist"] { border-bottom: 1px solid var(--border-md) !important; background: transparent !important; }
+[data-testid="stTabs"] [role="tab"] { font-family: var(--font-disp) !important; font-size: 0.75rem !important; font-weight: 400 !important; letter-spacing: 0.03em !important; color: var(--cream-mute) !important; padding: 10px 20px !important; border-radius: 0 !important; border-bottom: 2px solid transparent !important; background: transparent !important; }
+[data-testid="stTabs"] [role="tab"][aria-selected="true"] { color: var(--gold) !important; border-bottom-color: var(--gold) !important; }
 
 /* Alert boxes */
-[data-testid="stAlert"] {
-    border-radius: var(--radius-sm) !important;
-    font-family: var(--font-disp) !important;
-    font-size: 0.76rem !important;
-    border-left-width: 2px !important;
-}
+[data-testid="stAlert"] { border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.76rem !important; border-left-width: 2px !important; }
 [data-testid="stNotificationContentInfo"]    { background: rgba(232,224,208,0.03) !important; border-left-color: var(--cream-mute) !important; }
 [data-testid="stNotificationContentSuccess"] { background: var(--green-bg) !important; border-left-color: var(--green) !important; }
 [data-testid="stNotificationContentWarning"] { background: var(--warn-bg) !important; border-left-color: var(--amber-warn) !important; }
@@ -603,8 +471,7 @@ if "income_form_key"   not in st.session_state: st.session_state.income_form_key
 if "expense_form_key"  not in st.session_state: st.session_state.expense_form_key  = 0
 if "show_reset"        not in st.session_state: st.session_state.show_reset        = False
 
-# ── Helper: full month name ──
-def full_month(dt): return dt.strftime("%B %Y")
+def full_month(dt):  return dt.strftime("%B %Y")
 def short_month(dt): return dt.strftime("%b %Y")
 
 # ====================== MASTHEAD ======================
@@ -703,10 +570,9 @@ with col_lo:
 
 # ====================== MONTH SELECTOR ======================
 st.markdown('<span class="bw-section-label">Working Period</span>', unsafe_allow_html=True)
-working_month = st.date_input("", value=datetime.today(), label_visibility="collapsed")
-current_month      = short_month(working_month)   # "Mar 2026" — used as DB key
-current_month_full = full_month(working_month)    # "March 2026" — used in UI labels
-
+working_month      = st.date_input("", value=datetime.today(), label_visibility="collapsed")
+current_month      = short_month(working_month)
+current_month_full = full_month(working_month)
 st.markdown(f'<div class="bw-month"><span>▸</span>{current_month_full}</div>', unsafe_allow_html=True)
 
 # ====================== LOCK CHECK ======================
@@ -718,8 +584,8 @@ if month_locked:
 income_records  = load_income(current_month)
 expense_records = load_expense(current_month)
 
-income_df  = pd.DataFrame(income_records)  if income_records  else pd.DataFrame()
-expense_df = pd.DataFrame(expense_records) if expense_records else pd.DataFrame()
+income_df  = pd.DataFrame(income_records).reset_index(drop=True)  if income_records  else pd.DataFrame()
+expense_df = pd.DataFrame(expense_records).reset_index(drop=True) if expense_records else pd.DataFrame()
 
 if not income_df.empty:
     income_df["amount"] = pd.to_numeric(income_df["amount"], errors="coerce").fillna(0)
@@ -755,7 +621,7 @@ if not month_locked:
 
 if not income_df.empty:
     rows_html = ""
-    for _, row in income_df.iterrows():
+    for i, row in income_df.iterrows():
         rows_html += f"""
         <div class="bw-record-row">
             <div class="rr-left">
@@ -773,11 +639,13 @@ if not income_df.empty:
                 clear_income_month(current_month)
                 st.rerun()
         with col_del:
-            options = [f"{i} · {row['source']} · ₦{row['amount']:,.0f}" for i, row in income_df.iterrows()]
-            del_inc = st.selectbox("Select entry to remove", options=options, key="del_inc_select")
+            # Build options using positional index i (matches iloc)
+            inc_options = {f"{i} · {row['source']} · ₦{row['amount']:,.0f}": i
+                           for i, row in income_df.iterrows()}
+            del_inc = st.selectbox("Select entry to remove", options=list(inc_options.keys()), key="del_inc_select")
             if st.button("Remove Income", key="del_inc_btn"):
-                sel_idx = int(del_inc.split(" · ")[0])
-                delete_income(income_df.iloc[sel_idx]["id"])
+                pos = inc_options[del_inc]
+                delete_income(income_df.iloc[pos]["id"])
                 st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No income entries for this period.</p>', unsafe_allow_html=True)
@@ -809,7 +677,7 @@ if not month_locked:
 if not expense_df.empty:
     total_expense = expense_df["amount"].sum()
     rows_html2 = ""
-    for _, row in expense_df.iterrows():
+    for i, row in expense_df.iterrows():
         share = f"{row['amount']/total_expense*100:.0f}%" if total_expense > 0 else "—"
         rows_html2 += f"""
         <div class="bw-record-row">
@@ -828,11 +696,12 @@ if not expense_df.empty:
                 clear_expense_month(current_month)
                 st.rerun()
         with col_del2:
-            options2 = [f"{i} · {row['category']} · ₦{row['amount']:,.0f}" for i, row in expense_df.iterrows()]
-            del_exp = st.selectbox("Select entry to remove", options=options2, key="del_exp_select")
+            exp_options = {f"{i} · {row['category']} · ₦{row['amount']:,.0f}": i
+                           for i, row in expense_df.iterrows()}
+            del_exp = st.selectbox("Select entry to remove", options=list(exp_options.keys()), key="del_exp_select")
             if st.button("Remove Expense", key="del_exp_btn"):
-                sel_idx = int(del_exp.split(" · ")[0])
-                delete_expense(expense_df.iloc[sel_idx]["id"])
+                pos = exp_options[del_exp]
+                delete_expense(expense_df.iloc[pos]["id"])
                 st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No expense entries for this period.</p>', unsafe_allow_html=True)
