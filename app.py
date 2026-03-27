@@ -639,13 +639,13 @@ if not income_df.empty:
                 clear_income_month(current_month)
                 st.rerun()
         with col_del:
-            # Build options using positional index i (matches iloc)
-            inc_options = {f"{i} · {row['source']} · ₦{row['amount']:,.0f}": i
-                           for i, row in income_df.iterrows()}
-            del_inc = st.selectbox("Select entry to remove", options=list(inc_options.keys()), key="del_inc_select")
+            inc_ids = list(income_df["id"])
+            inc_labels = [f"{i} · {row['source']} · ₦{row['amount']:,.0f}"
+                          for i, row in income_df.iterrows()]
+            del_inc = st.selectbox("Select entry to remove", options=inc_labels, key="del_inc_select")
             if st.button("Remove Income", key="del_inc_btn"):
-                pos = inc_options[del_inc]
-                delete_income(income_df.iloc[pos]["id"])
+                sel_idx = int(del_inc.split(" · ")[0])
+                delete_income(inc_ids[sel_idx])
                 st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No income entries for this period.</p>', unsafe_allow_html=True)
@@ -696,12 +696,13 @@ if not expense_df.empty:
                 clear_expense_month(current_month)
                 st.rerun()
         with col_del2:
-            exp_options = {f"{i} · {row['category']} · ₦{row['amount']:,.0f}": i
-                           for i, row in expense_df.iterrows()}
-            del_exp = st.selectbox("Select entry to remove", options=list(exp_options.keys()), key="del_exp_select")
+            exp_ids = list(expense_df["id"])
+            exp_labels = [f"{i} · {row['category']} · ₦{row['amount']:,.0f}"
+                          for i, row in expense_df.iterrows()]
+            del_exp = st.selectbox("Select entry to remove", options=exp_labels, key="del_exp_select")
             if st.button("Remove Expense", key="del_exp_btn"):
-                pos = exp_options[del_exp]
-                delete_expense(expense_df.iloc[pos]["id"])
+                sel_idx = int(del_exp.split(" · ")[0])
+                delete_expense(exp_ids[sel_idx])
                 st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No expense entries for this period.</p>', unsafe_allow_html=True)
