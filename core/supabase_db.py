@@ -39,7 +39,7 @@ def add_income(month_year, source, income_type, amount, notes):
 def load_income(month_year):
     try:
         res = get_client().table("income") \
-            .select("id, user_id, month_year, source, income_type, amount, notes") \
+            .select("*") \
             .eq("month_year", month_year) \
             .execute()
         return res.data or []
@@ -77,7 +77,7 @@ def add_expense(month_year, category, amount, description):
 def load_expense(month_year):
     try:
         res = get_client().table("expense") \
-            .select("id, user_id, month_year, category, amount, description") \
+            .select("*") \
             .eq("month_year", month_year) \
             .execute()
         return res.data or []
@@ -103,7 +103,7 @@ def clear_expense_month(month_year):
 def is_month_locked(month_year):
     try:
         res = get_client().table("locked_months") \
-            .select("id") \
+            .select("*") \
             .eq("user_id", get_user_id()) \
             .eq("month_year", month_year) \
             .execute()
@@ -121,4 +121,4 @@ def lock_month(month_year):
     except Exception as e:
         st.error(f"Lock error: {str(e)}")
         return False
-        
+                                             
