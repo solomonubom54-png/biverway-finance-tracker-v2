@@ -285,10 +285,6 @@ if month_locked:
 income_records  = load_income(current_month)   # raw list of dicts from Supabase
 expense_records = load_expense(current_month)  # raw list of dicts from Supabase
 
-# TEMPORARY DEBUG
-if income_records:
-    st.write("Keys:", list(income_records[0].keys()))
-
 income_df  = pd.DataFrame(income_records)  if income_records  else pd.DataFrame()
 expense_df = pd.DataFrame(expense_records) if expense_records else pd.DataFrame()
 
