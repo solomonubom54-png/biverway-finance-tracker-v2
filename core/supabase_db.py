@@ -39,7 +39,7 @@ def add_income(month_year, source, income_type, amount, notes):
 def load_income(month_year):
     try:
         res = get_client().table("income") \
-            .select("*") \
+            .select("id, user_id, month_year, source, income_type, amount, notes") \
             .eq("month_year", month_year) \
             .execute()
         return res.data or []
@@ -49,7 +49,7 @@ def load_income(month_year):
 
 def delete_income(row_id):
     try:
-        get_client().table("income").delete().eq("id", row_id).execute()
+        get_client().table("income").delete().eq("id", str(row_id)).execute()
     except Exception as e:
         st.error(f"Delete income error: {str(e)}")
 
@@ -77,7 +77,7 @@ def add_expense(month_year, category, amount, description):
 def load_expense(month_year):
     try:
         res = get_client().table("expense") \
-            .select("*") \
+            .select("id, user_id, month_year, category, amount, description") \
             .eq("month_year", month_year) \
             .execute()
         return res.data or []
@@ -87,7 +87,7 @@ def load_expense(month_year):
 
 def delete_expense(row_id):
     try:
-        get_client().table("expense").delete().eq("id", row_id).execute()
+        get_client().table("expense").delete().eq("id", str(row_id)).execute()
     except Exception as e:
         st.error(f"Delete expense error: {str(e)}")
 
@@ -121,4 +121,4 @@ def lock_month(month_year):
     except Exception as e:
         st.error(f"Lock error: {str(e)}")
         return False
-                                                 
+        
