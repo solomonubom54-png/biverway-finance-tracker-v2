@@ -8,10 +8,8 @@ from core.supabase_db import (
     is_month_locked, lock_month
 )
 
-# ====================== PAGE CONFIG ======================
 st.set_page_config(page_title="Biverway Financial OS", layout="wide")
 
-# ====================== GLOBAL STYLES ======================
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
@@ -21,7 +19,6 @@ st.markdown("""
     --bg-card:     #0d1017;
     --bg-elevated: #131720;
     --bg-input:    #0c0f15;
-    --bg-dropdown: #0d1017;
     --gold:        #c9a84c;
     --gold-dim:    #9a7a34;
     --gold-glow:   rgba(201,168,76,0.07);
@@ -59,24 +56,22 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     margin: 0 auto !important;
 }
 .block-container { padding: 0 1.4rem 4rem !important; }
-
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
 
-/* ── MASTHEAD ── */
+/* MASTHEAD */
 .bw-masthead { padding: 32px 0 22px; border-bottom: 1px solid var(--gold-line); margin-bottom: 28px; }
 .bw-masthead-label { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
 .bw-masthead h1 { font-family: var(--font-disp); font-size: 1.75rem; font-weight: 700; letter-spacing: -0.01em; color: var(--white); margin: 0 0 6px 0; line-height: 1.1; text-transform: uppercase; }
 .bw-masthead-sub { font-size: 0.72rem; color: var(--cream-mute); font-weight: 300; letter-spacing: 0.04em; }
 
-/* ── SECTION LABEL ── */
+/* SECTION LABEL */
 .bw-section-label { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); padding-bottom: 10px; margin: 28px 0 14px 0; border-bottom: 1px solid var(--gold-line); display: block; }
 
-/* ── MONTH BADGE ── */
+/* MONTH BADGE */
 .bw-month { display: inline-flex; align-items: center; gap: 8px; background: var(--gold-glow); border: 1px solid var(--gold-line); color: var(--gold); font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 13px; border-radius: 100px; margin-bottom: 20px; }
 
-/* ── KPI GRID ── */
+/* KPI GRID */
 .bw-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-soft); border: 1px solid var(--border-md); border-radius: var(--radius); overflow: hidden; margin: 0 0 20px 0; }
 .bw-kpi { background: var(--bg-card); padding: 16px 12px 14px; display: flex; flex-direction: column; justify-content: space-between; min-height: 82px; }
 .bw-kpi.highlight { background: linear-gradient(160deg, #0d1017 55%, rgba(201,168,76,0.05) 100%); }
@@ -86,25 +81,25 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 .bw-kpi .kpi-value.positive { color: var(--green); }
 .bw-kpi .kpi-value.negative { color: var(--red); }
 
-/* ── STATUS BADGE ── */
+/* STATUS */
 .bw-status { display: inline-flex; align-items: flex-start; gap: 9px; padding: 10px 14px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.68rem; margin-top: 4px; line-height: 1.5; }
 .bw-status.green  { background: var(--green-bg); color: var(--green); border: 1px solid rgba(76,175,125,0.15); }
 .bw-status.yellow { background: var(--warn-bg); color: var(--amber-warn); border: 1px solid rgba(212,146,42,0.15); }
 .bw-status.red    { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,84,74,0.15); }
 .bw-status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; flex-shrink: 0; margin-top: 5px; }
 
-/* ── INSIGHT ROW ── */
+/* INSIGHT ROW */
 .bw-insight-row { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--border-soft); }
 .bw-insight-row:last-child { border-bottom: none; }
 .bw-insight-row .ir-label { font-size: 0.78rem; color: var(--cream-dim); font-weight: 400; }
 .bw-insight-row .ir-value { font-family: var(--font-mono); font-size: 0.88rem; font-weight: 500; color: var(--white); }
 .bw-insight-row .ir-sub { font-size: 0.62rem; color: var(--cream-mute); margin-left: 7px; }
 
-/* ── PROGRESS BAR ── */
+/* PROGRESS BAR */
 .bw-bar-wrap { width: 100%; height: 1px; background: var(--border-md); border-radius: 1px; margin-top: 6px; overflow: hidden; }
 .bw-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius: 1px; }
 
-/* ── RECORD ROWS ── */
+/* RECORD ROWS */
 .bw-record-table { border: 1px solid var(--border-md); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 16px; }
 .bw-record-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--border-soft); background: var(--bg-card); }
 .bw-record-row:last-child { border-bottom: none; }
@@ -113,7 +108,7 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 .bw-record-row .rr-meta { font-size: 0.63rem; color: var(--cream-mute); font-family: var(--font-mono); letter-spacing: 0.04em; }
 .bw-record-row .rr-amount { font-family: var(--font-mono); font-size: 0.92rem; font-weight: 500; color: var(--white); }
 
-/* ── ALLOC ROWS ── */
+/* ALLOC ROWS */
 .bw-alloc-wrap { border: 1px solid var(--border-md); border-radius: var(--radius-sm); overflow: hidden; margin: 14px 0 16px; }
 .bw-alloc-row { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); background: var(--bg-card); }
 .bw-alloc-row:last-child { border-bottom: none; }
@@ -121,76 +116,69 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 .bw-alloc-row .ar-pct { font-family: var(--font-mono); font-size: 0.63rem; color: var(--gold); letter-spacing: 0.05em; width: 38px; text-align: center; }
 .bw-alloc-row .ar-amt { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; color: var(--white); text-align: right; min-width: 96px; }
 
-/* ── LOCK BANNER ── */
+/* LOCK BANNER */
 .bw-lock-banner { background: rgba(201,168,76,0.04); border: 1px solid var(--gold-line); border-radius: var(--radius-sm); padding: 11px 16px; margin-bottom: 16px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--gold); display: flex; align-items: center; gap: 10px; }
 
-/* ── CONFIRM BOX ── */
+/* CONFIRM BOX */
 .bw-confirm { background: var(--bg-elevated); border: 1px solid var(--gold-line); border-radius: var(--radius-sm); padding: 14px 16px; margin: 10px 0; }
-.bw-confirm p { font-family: var(--font-disp); font-size: 0.8rem; color: var(--cream-dim); margin: 0 0 12px 0; line-height: 1.5; }
+.bw-confirm p { font-family: var(--font-disp); font-size: 0.78rem; color: var(--cream-dim); margin: 0 0 12px 0; line-height: 1.5; }
 .bw-confirm strong { color: var(--white); }
 
-/* ── USER BAR ── */
+/* USER BAR */
 .bw-userbar { padding: 10px 0 18px; border-bottom: 1px solid var(--border-soft); margin-bottom: 4px; }
 .bw-ub-email { font-family: var(--font-mono); font-size: 0.63rem; color: var(--cream-mute); letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; }
 .bw-ub-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; flex-shrink: 0; }
 
-/* ── FOOTER ── */
+/* FOOTER */
 .bw-footer { text-align: center; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-mute); margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border-soft); }
 
-/* ══════════════════════════════════════
-   STREAMLIT WIDGET OVERRIDES
-   ══════════════════════════════════════ */
+/* ═══════════════════════════════════
+   WIDGET OVERRIDES
+   ═══════════════════════════════════ */
 
-/* Labels — very soft */
+/* Labels */
 [data-testid="stWidgetLabel"] p,
 [data-baseweb="form-control-label"] {
     font-family: var(--font-disp) !important;
     font-size: 0.67rem !important;
-    letter-spacing: 0.02em !important;
-    text-transform: none !important;
     color: var(--cream-mute) !important;
     font-weight: 400 !important;
     margin-bottom: 6px !important;
+    letter-spacing: 0.01em !important;
 }
 
-/* ── TEXT INPUTS — soft borders ── */
+/* Text inputs */
 [data-baseweb="input"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
     border-radius: var(--radius-sm) !important;
-    transition: border-color 0.2s !important;
     box-shadow: none !important;
 }
 [data-baseweb="input"] input {
     background: transparent !important;
     color: var(--white) !important;
     font-family: var(--font-mono) !important;
-    font-size: 0.88rem !important;
+    font-size: 0.86rem !important;
     padding: 11px 14px !important;
 }
 [data-baseweb="input"]:focus-within > div {
-    border-color: rgba(201,168,76,0.25) !important;
+    border-color: rgba(201,168,76,0.22) !important;
     box-shadow: none !important;
 }
 
-/* ── TEXTAREA — soft ── */
+/* Textarea */
 [data-baseweb="textarea"] textarea {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
     border-radius: var(--radius-sm) !important;
     color: var(--cream-dim) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.82rem !important;
+    font-size: 0.81rem !important;
     padding: 11px 14px !important;
-    box-shadow: none !important;
-    transition: border-color 0.2s !important;
-}
-[data-baseweb="textarea"]:focus-within textarea {
-    border-color: rgba(201,168,76,0.2) !important;
     box-shadow: none !important;
 }
 
-/* ── NUMBER INPUT — muted +/- ── */
+/* Number input */
 [data-testid="stNumberInput"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
@@ -201,7 +189,7 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: transparent !important;
     color: var(--white) !important;
     font-family: var(--font-mono) !important;
-    font-size: 0.95rem !important;
+    font-size: 0.92rem !important;
 }
 [data-testid="stNumberInput"] button {
     background: transparent !important;
@@ -213,7 +201,7 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: var(--gold-glow) !important;
 }
 
-/* ── DATE INPUT — soft border ── */
+/* Date input */
 [data-testid="stDateInput"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
@@ -224,139 +212,119 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: transparent !important;
     color: var(--white) !important;
     font-family: var(--font-mono) !important;
-    font-size: 0.85rem !important;
+    font-size: 0.84rem !important;
     padding: 11px 14px !important;
 }
 
-/* ══════════════════════════════════════
-   DROPDOWNS — fully dark, system-native
-   ══════════════════════════════════════ */
+/* ═══════════════════════════════════
+   SELECT / DROPDOWN — dark, white text
+   ═══════════════════════════════════ */
 
-/* Collapsed select box */
+/* Collapsed trigger */
 [data-baseweb="select"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
     border-radius: var(--radius-sm) !important;
     box-shadow: none !important;
-    min-height: 46px !important;
-    transition: border-color 0.2s !important;
+    min-height: 44px !important;
 }
-[data-baseweb="select"] > div:focus-within {
-    border-color: rgba(201,168,76,0.22) !important;
-}
-/* Text inside collapsed select */
 [data-baseweb="select"] > div > div {
-    padding: 10px 14px !important;
-    align-items: center !important;
+    padding: 8px 12px !important;
 }
+/* Selected value text — white, smaller */
 [data-baseweb="select"] > div > div > div,
 [data-baseweb="select"] > div span,
 [data-baseweb="select"] [data-testid="stSelectboxVirtualDropdown"] {
-    color: var(--cream-dim) !important;
+    color: var(--white) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.83rem !important;
+    font-size: 0.8rem !important;
     font-weight: 400 !important;
     white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
     line-height: 1.4 !important;
 }
-/* Dropdown chevron */
-[data-baseweb="select"] svg {
-    color: rgba(232,224,208,0.2) !important;
-    width: 14px !important;
-}
+[data-baseweb="select"] svg { color: rgba(232,224,208,0.25) !important; width: 14px !important; }
 
-/* ── DROPDOWN LIST — dark elevated ── */
+/* Dropdown list — dark background */
 [data-baseweb="popover"],
 [data-baseweb="menu"],
 ul[role="listbox"],
 [role="listbox"] {
-    background: var(--bg-dropdown) !important;
-    border: 1px solid rgba(201,168,76,0.12) !important;
+    background: #0a0d13 !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
     border-radius: var(--radius-sm) !important;
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.7),
-        0 4px 16px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.03) !important;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.75), 0 2px 8px rgba(0,0,0,0.5) !important;
 }
 
-/* Individual options */
+/* Options — white text, smaller, dark bg */
 [role="option"] {
     background: transparent !important;
-    color: var(--cream-dim) !important;
+    color: rgba(232,224,208,0.75) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.81rem !important;
+    font-size: 0.78rem !important;
     font-weight: 400 !important;
-    padding: 11px 16px !important;
-    border-bottom: 1px solid rgba(255,255,255,0.03) !important;
+    padding: 10px 14px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
     cursor: pointer !important;
     white-space: normal !important;
-    line-height: 1.45 !important;
-    word-break: break-word !important;
-    transition: background 0.15s, color 0.15s !important;
+    line-height: 1.4 !important;
+    transition: background 0.12s, color 0.12s !important;
 }
 [role="option"]:last-child { border-bottom: none !important; }
-
-/* Hover — very soft gold tint */
 [role="option"]:hover {
-    background: rgba(201,168,76,0.06) !important;
-    color: rgba(201,168,76,0.9) !important;
+    background: rgba(255,255,255,0.04) !important;
+    color: var(--white) !important;
 }
-
-/* Selected — minimal gold, no cream/beige */
 [aria-selected="true"],
 [role="option"][aria-selected="true"] {
-    background: rgba(201,168,76,0.08) !important;
+    background: rgba(201,168,76,0.07) !important;
     color: var(--gold) !important;
     font-weight: 500 !important;
 }
 
-/* ══════════════════════════════════════
+/* ═══════════════════════════════════
    BUTTONS
-   ══════════════════════════════════════ */
+   ═══════════════════════════════════ */
 
-/* PRIMARY — Gold */
+/* PRIMARY — gold */
 [data-testid="stFormSubmitButton"] button {
     background: var(--gold) !important;
     color: #080a0e !important;
     border: none !important;
     border-radius: var(--radius-sm) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.78rem !important;
+    font-size: 0.76rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.04em !important;
-    padding: 13px 28px !important;
+    padding: 12px 24px !important;
     width: 100% !important;
     margin-top: 10px !important;
-    transition: background 0.2s, transform 0.1s !important;
-    box-shadow: 0 2px 12px rgba(201,168,76,0.15) !important;
+    transition: background 0.18s, transform 0.1s !important;
 }
 [data-testid="stFormSubmitButton"] button:hover {
     background: #d4b460 !important;
     transform: translateY(-1px) !important;
 }
 
-/* SECONDARY — dark card style, visible but not primary */
+/* SECONDARY — black bg, white text, small */
 [data-testid="baseButton-secondary"] {
-    background: var(--bg-elevated) !important;
-    color: var(--cream-dim) !important;
-    border: 1px solid var(--border-md) !important;
+    background: #0a0d13 !important;
+    color: rgba(232,224,208,0.75) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
     border-radius: var(--radius-sm) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.74rem !important;
-    font-weight: 500 !important;
-    padding: 9px 18px !important;
+    font-size: 0.7rem !important;
+    font-weight: 400 !important;
+    padding: 7px 14px !important;
     transition: all 0.15s !important;
     box-shadow: none !important;
 }
 [data-testid="baseButton-secondary"]:hover {
-    background: var(--bg-card) !important;
-    border-color: rgba(201,168,76,0.3) !important;
-    color: var(--gold) !important;
+    background: #111520 !important;
+    border-color: rgba(201,168,76,0.25) !important;
+    color: var(--white) !important;
 }
 
-/* ── EXPANDERS — dark ── */
+/* Expanders */
 [data-testid="stExpander"] {
     background: var(--bg-card) !important;
     border: 1px solid var(--border-md) !important;
@@ -367,31 +335,25 @@ ul[role="listbox"],
 [data-testid="stExpander"] > details > summary {
     background: var(--bg-elevated) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.78rem !important;
+    font-size: 0.76rem !important;
     font-weight: 500 !important;
     color: var(--cream-dim) !important;
-    padding: 13px 18px !important;
+    padding: 12px 18px !important;
     border-bottom: 1px solid var(--border-soft) !important;
     list-style: none !important;
 }
-[data-testid="stExpander"] > details[open] > summary {
-    color: var(--gold) !important;
-    border-bottom-color: var(--gold-line) !important;
-}
+[data-testid="stExpander"] > details[open] > summary { color: var(--gold) !important; border-bottom-color: var(--gold-line) !important; }
 [data-testid="stExpander"] > details > summary:hover { color: var(--gold) !important; }
-[data-testid="stExpanderToggleIcon"] { color: rgba(201,168,76,0.5) !important; }
-[data-testid="stExpander"] > details > div {
-    padding: 18px 18px 20px !important;
-    background: var(--bg-card) !important;
-}
+[data-testid="stExpanderToggleIcon"] { color: rgba(201,168,76,0.45) !important; }
+[data-testid="stExpander"] > details > div { padding: 18px 18px 20px !important; background: var(--bg-card) !important; }
 
-/* ── TABS ── */
+/* Tabs */
 [data-testid="stTabs"] [role="tablist"] { border-bottom: 1px solid var(--border-md) !important; background: transparent !important; }
-[data-testid="stTabs"] [role="tab"] { font-family: var(--font-disp) !important; font-size: 0.75rem !important; font-weight: 400 !important; color: var(--cream-mute) !important; padding: 10px 20px !important; border-radius: 0 !important; border-bottom: 2px solid transparent !important; background: transparent !important; }
+[data-testid="stTabs"] [role="tab"] { font-family: var(--font-disp) !important; font-size: 0.73rem !important; font-weight: 400 !important; color: var(--cream-mute) !important; padding: 10px 20px !important; border-radius: 0 !important; border-bottom: 2px solid transparent !important; background: transparent !important; }
 [data-testid="stTabs"] [role="tab"][aria-selected="true"] { color: var(--gold) !important; border-bottom-color: var(--gold) !important; }
 
-/* ── ALERTS ── */
-[data-testid="stAlert"] { border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.76rem !important; border-left-width: 2px !important; }
+/* Alerts */
+[data-testid="stAlert"] { border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.74rem !important; border-left-width: 2px !important; }
 [data-testid="stNotificationContentInfo"]    { background: rgba(232,224,208,0.03) !important; border-left-color: var(--cream-mute) !important; }
 [data-testid="stNotificationContentSuccess"] { background: var(--green-bg) !important; border-left-color: var(--green) !important; }
 [data-testid="stNotificationContentWarning"] { background: var(--warn-bg) !important; border-left-color: var(--amber-warn) !important; }
@@ -423,7 +385,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ====================== AUTH WALL ======================
+# ====================== AUTH ======================
 if st.session_state.supabase_session is None:
 
     if st.session_state.show_reset:
@@ -433,10 +395,7 @@ if st.session_state.supabase_session is None:
             submit_reset = st.form_submit_button("Send Reset Link")
         if submit_reset:
             try:
-                client.auth.reset_password_email(
-                    reset_email,
-                    options={"redirect_to": "https://biverway-finance-tracker-v2-3weeiriwgi5sqcczk3uuxd.streamlit.app"}
-                )
+                client.auth.reset_password_email(reset_email, options={"redirect_to": "https://biverway-finance-tracker-v2-3weeiriwgi5sqcczk3uuxd.streamlit.app"})
                 st.success("Reset link sent — check your inbox.")
             except Exception as e:
                 st.error(f"Error: {str(e)}")
@@ -446,7 +405,6 @@ if st.session_state.supabase_session is None:
         st.stop()
 
     tab1, tab2 = st.tabs(["Sign In", "Create Account"])
-
     with tab1:
         with st.form("login_form"):
             email    = st.text_input("Email")
@@ -460,12 +418,9 @@ if st.session_state.supabase_session is None:
                     st.rerun()
             except Exception as e:
                 err = str(e).lower()
-                if "invalid" in err or "credentials" in err:
-                    st.error("Incorrect email or password.")
-                elif "email not confirmed" in err:
-                    st.warning("Please confirm your email before signing in.")
-                else:
-                    st.error(f"Sign in failed: {e}")
+                if "invalid" in err or "credentials" in err: st.error("Incorrect email or password.")
+                elif "email not confirmed" in err: st.warning("Please confirm your email before signing in.")
+                else: st.error(f"Sign in failed: {e}")
         if st.button("Forgot password?"):
             st.session_state.show_reset = True
             st.rerun()
@@ -487,13 +442,10 @@ if st.session_state.supabase_session is None:
                         st.success("Account created. Check your email to confirm before signing in.")
             except Exception as e:
                 err = str(e).lower()
-                if "already registered" in err or "already exists" in err:
-                    st.error("This email is already registered. Please sign in instead.")
-                elif "rate limit" in err:
-                    st.warning("Too many attempts. Please wait a few minutes.")
-                else:
-                    st.error(f"Registration failed: {e}")
-        st.markdown('<p style="font-family:var(--font-disp);font-size:0.68rem;color:var(--cream-mute);margin-top:12px;line-height:1.7;">After registering, confirm your email before signing in.</p>', unsafe_allow_html=True)
+                if "already registered" in err or "already exists" in err: st.error("This email is already registered.")
+                elif "rate limit" in err: st.warning("Too many attempts. Please wait a few minutes.")
+                else: st.error(f"Registration failed: {e}")
+        st.markdown('<p style="font-family:var(--font-disp);font-size:0.67rem;color:var(--cream-mute);margin-top:12px;line-height:1.7;">After registering, confirm your email before signing in.</p>', unsafe_allow_html=True)
 
     st.stop()
 
@@ -508,14 +460,13 @@ with col_lo:
         st.session_state.supabase_session = None
         st.rerun()
 
-# ====================== MONTH SELECTOR ======================
+# ====================== MONTH ======================
 st.markdown('<span class="bw-section-label">Working Period</span>', unsafe_allow_html=True)
 working_month      = st.date_input("", value=datetime.today(), label_visibility="collapsed")
 current_month      = short_month(working_month)
 current_month_full = full_month(working_month)
 st.markdown(f'<div class="bw-month">&#9658;&nbsp;{current_month_full}</div>', unsafe_allow_html=True)
 
-# ====================== LOCK CHECK ======================
 month_locked = is_month_locked(current_month)
 if month_locked:
     st.markdown(f'<div class="bw-lock-banner">&#128274;&nbsp;{current_month_full} is locked &mdash; all records are permanently frozen</div>', unsafe_allow_html=True)
@@ -523,35 +474,23 @@ if month_locked:
 # ====================== LOAD DATA ======================
 income_records  = load_income(current_month)
 expense_records = load_expense(current_month)
-
 income_df  = pd.DataFrame(income_records)  if income_records  else pd.DataFrame()
 expense_df = pd.DataFrame(expense_records) if expense_records else pd.DataFrame()
-
-if not income_df.empty:
-    income_df["amount"] = pd.to_numeric(income_df["amount"], errors="coerce").fillna(0)
-if not expense_df.empty:
-    expense_df["amount"] = pd.to_numeric(expense_df["amount"], errors="coerce").fillna(0)
+if not income_df.empty:  income_df["amount"]  = pd.to_numeric(income_df["amount"],  errors="coerce").fillna(0)
+if not expense_df.empty: expense_df["amount"] = pd.to_numeric(expense_df["amount"], errors="coerce").fillna(0)
 
 # ====================== INCOME ======================
 st.markdown('<span class="bw-section-label">Income</span>', unsafe_allow_html=True)
 
-income_type_map = {
-    "Skill": "Active",
-    "Salary": "Active",
-    "Business": "Passive",
-    "Dividend / Interest": "Passive",
-    "Rental": "Passive"
-}
+income_type_map = {"Skill": "Active", "Salary": "Active", "Business": "Passive", "Dividend / Interest": "Passive", "Rental": "Passive"}
 
 if not month_locked:
     with st.expander("Add Income"):
         with st.form(f"income_form_{st.session_state.income_form_key}"):
             col_a, col_b = st.columns(2)
-            with col_a:
-                income_source = st.selectbox("Source", list(income_type_map.keys()))
-            with col_b:
-                amount = st.number_input("Amount (&#8358;)", min_value=0.0, step=1000.0, format="%0.0f")
-            notes = st.text_area("Notes", height=72, placeholder="Optional context...")
+            with col_a: income_source = st.selectbox("Source", list(income_type_map.keys()))
+            with col_b: amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
+            notes = st.text_area("Notes", height=70, placeholder="Optional context...")
             submit_income = st.form_submit_button("Record Income")
         if submit_income:
             add_income(current_month, income_source, income_type_map[income_source], amount, notes)
@@ -562,72 +501,49 @@ if not month_locked:
 if not income_df.empty:
     rows_html = ""
     for _, row in income_df.iterrows():
-        rows_html += f"""
-        <div class="bw-record-row">
-            <div class="rr-left">
-                <span class="rr-source">{row['source']}</span>
-                <span class="rr-meta">{row['income_type']} &nbsp;&middot;&nbsp; {row.get('notes','') or '&mdash;'}</span>
-            </div>
-            <span class="rr-amount">&#8358;{row['amount']:,.0f}</span>
-        </div>"""
+        rows_html += f'<div class="bw-record-row"><div class="rr-left"><span class="rr-source">{row["source"]}</span><span class="rr-meta">{row["income_type"]} &nbsp;&middot;&nbsp; {row.get("notes","") or "&mdash;"}</span></div><span class="rr-amount">&#8358;{row["amount"]:,.0f}</span></div>'
     st.markdown(f'<div class="bw-record-table">{rows_html}</div>', unsafe_allow_html=True)
 
     if not month_locked:
         inc_map = {}
         for idx, rec in enumerate(income_records):
-            amt   = float(rec.get("amount", 0))
+            amt = float(rec.get("amount", 0))
             label = f"{idx + 1}. {rec['source']} \u2014 \u20a6{amt:,.0f}"
             inc_map[label] = rec["id"]
 
         if st.session_state.confirm_del_income is None:
             col_del, col_clr = st.columns([3, 1])
             with col_clr:
-                if st.button("Clear Month", key="clr_inc"):
-                    clear_income_month(current_month)
-                    st.rerun()
+                if st.button("Clear Month", key="clr_inc"): clear_income_month(current_month); st.rerun()
             with col_del:
                 selected_inc = st.selectbox("Remove Income", options=list(inc_map.keys()), key="del_inc_select")
                 if st.button("Remove Income", key="del_inc_btn"):
-                    st.session_state.confirm_del_income = selected_inc
-                    st.rerun()
+                    st.session_state.confirm_del_income = selected_inc; st.rerun()
         else:
             entry = st.session_state.confirm_del_income
-            st.markdown(f"""
-            <div class="bw-confirm">
-                <p>Remove <strong>{entry}</strong>?<br>
-                <span style="font-size:0.72rem;color:var(--cream-mute);">This cannot be undone.</span></p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f'<div class="bw-confirm"><p>Remove <strong>{entry}</strong>?<br><span style="font-size:0.7rem;color:var(--cream-mute);">This cannot be undone.</span></p></div>', unsafe_allow_html=True)
             col_yes, col_no = st.columns([1, 1])
             with col_yes:
                 if st.button("Yes, Remove", key="confirm_inc_yes"):
-                    delete_income(inc_map[entry])
-                    st.session_state.confirm_del_income = None
-                    st.rerun()
+                    delete_income(inc_map[entry]); st.session_state.confirm_del_income = None; st.rerun()
             with col_no:
                 if st.button("Cancel", key="confirm_inc_no"):
-                    st.session_state.confirm_del_income = None
-                    st.rerun()
+                    st.session_state.confirm_del_income = None; st.rerun()
 else:
-    st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No income entries for this period.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-family:var(--font-mono);font-size:0.67rem;color:var(--cream-mute);padding:6px 0;">No income entries for this period.</p>', unsafe_allow_html=True)
 
 # ====================== EXPENSES ======================
 st.markdown('<span class="bw-section-label">Expenses</span>', unsafe_allow_html=True)
 
-expense_categories = [
-    "Rent", "Food", "Utilities", "Transport",
-    "Healthcare", "Education", "Subscription", "Family Support"
-]
+expense_categories = ["Rent", "Food", "Utilities", "Transport", "Healthcare", "Education", "Subscription", "Family Support"]
 
 if not month_locked:
     with st.expander("Add Expense"):
         with st.form(f"expense_form_{st.session_state.expense_form_key}"):
             col_c, col_d = st.columns(2)
-            with col_c:
-                category = st.selectbox("Category", expense_categories)
-            with col_d:
-                expense_amount = st.number_input("Amount (&#8358;)", min_value=0.0, step=1000.0, format="%0.0f")
-            description = st.text_area("Description", height=72, placeholder="Optional context...")
+            with col_c: category = st.selectbox("Category", expense_categories)
+            with col_d: expense_amount = st.number_input("Amount", min_value=0.0, step=1000.0, format="%0.0f")
+            description = st.text_area("Description", height=70, placeholder="Optional context...")
             submit_expense = st.form_submit_button("Record Expense")
         if submit_expense:
             add_expense(current_month, category, expense_amount, description)
@@ -640,54 +556,36 @@ if not expense_df.empty:
     rows_html2 = ""
     for _, row in expense_df.iterrows():
         share = f"{row['amount']/total_expense*100:.0f}%" if total_expense > 0 else "0%"
-        rows_html2 += f"""
-        <div class="bw-record-row">
-            <div class="rr-left">
-                <span class="rr-source">{row['category']}</span>
-                <span class="rr-meta">{share} of total &nbsp;&middot;&nbsp; {row.get('description','') or '&mdash;'}</span>
-            </div>
-            <span class="rr-amount">&#8358;{row['amount']:,.0f}</span>
-        </div>"""
+        rows_html2 += f'<div class="bw-record-row"><div class="rr-left"><span class="rr-source">{row["category"]}</span><span class="rr-meta">{share} of total &nbsp;&middot;&nbsp; {row.get("description","") or "&mdash;"}</span></div><span class="rr-amount">&#8358;{row["amount"]:,.0f}</span></div>'
     st.markdown(f'<div class="bw-record-table">{rows_html2}</div>', unsafe_allow_html=True)
 
     if not month_locked:
         exp_map = {}
         for idx, rec in enumerate(expense_records):
-            amt   = float(rec.get("amount", 0))
+            amt = float(rec.get("amount", 0))
             label = f"{idx + 1}. {rec['category']} \u2014 \u20a6{amt:,.0f}"
             exp_map[label] = rec["id"]
 
         if st.session_state.confirm_del_expense is None:
             col_del2, col_clr2 = st.columns([3, 1])
             with col_clr2:
-                if st.button("Clear Month", key="clr_exp"):
-                    clear_expense_month(current_month)
-                    st.rerun()
+                if st.button("Clear Month", key="clr_exp"): clear_expense_month(current_month); st.rerun()
             with col_del2:
                 selected_exp = st.selectbox("Remove Expense", options=list(exp_map.keys()), key="del_exp_select")
                 if st.button("Remove Expense", key="del_exp_btn"):
-                    st.session_state.confirm_del_expense = selected_exp
-                    st.rerun()
+                    st.session_state.confirm_del_expense = selected_exp; st.rerun()
         else:
             entry = st.session_state.confirm_del_expense
-            st.markdown(f"""
-            <div class="bw-confirm">
-                <p>Remove <strong>{entry}</strong>?<br>
-                <span style="font-size:0.72rem;color:var(--cream-mute);">This cannot be undone.</span></p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f'<div class="bw-confirm"><p>Remove <strong>{entry}</strong>?<br><span style="font-size:0.7rem;color:var(--cream-mute);">This cannot be undone.</span></p></div>', unsafe_allow_html=True)
             col_yes2, col_no2 = st.columns([1, 1])
             with col_yes2:
                 if st.button("Yes, Remove", key="confirm_exp_yes"):
-                    delete_expense(exp_map[entry])
-                    st.session_state.confirm_del_expense = None
-                    st.rerun()
+                    delete_expense(exp_map[entry]); st.session_state.confirm_del_expense = None; st.rerun()
             with col_no2:
                 if st.button("Cancel", key="confirm_exp_no"):
-                    st.session_state.confirm_del_expense = None
-                    st.rerun()
+                    st.session_state.confirm_del_expense = None; st.rerun()
 else:
-    st.markdown('<p style="font-family:var(--font-mono);font-size:0.68rem;color:var(--cream-mute);padding:6px 0;">No expense entries for this period.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-family:var(--font-mono);font-size:0.67rem;color:var(--cream-mute);padding:6px 0;">No expense entries for this period.</p>', unsafe_allow_html=True)
 
 # ====================== PERFORMANCE ======================
 total_income  = income_df["amount"].sum()  if not income_df.empty  else 0
@@ -700,18 +598,9 @@ st.markdown('<span class="bw-section-label">Financial Performance</span>', unsaf
 surplus_cls = "positive" if net_surplus >= 0 else "negative"
 st.markdown(f"""
 <div class="bw-kpi-grid">
-    <div class="bw-kpi">
-        <span class="kpi-label">Total<br>Income</span>
-        <span class="kpi-value">&#8358;{total_income:,.0f}</span>
-    </div>
-    <div class="bw-kpi">
-        <span class="kpi-label">Total<br>Expenses</span>
-        <span class="kpi-value">&#8358;{total_expense:,.0f}</span>
-    </div>
-    <div class="bw-kpi highlight">
-        <span class="kpi-label">Net<br>Surplus</span>
-        <span class="kpi-value {surplus_cls}">&#8358;{net_surplus:,.0f}</span>
-    </div>
+    <div class="bw-kpi"><span class="kpi-label">Total<br>Income</span><span class="kpi-value">&#8358;{total_income:,.0f}</span></div>
+    <div class="bw-kpi"><span class="kpi-label">Total<br>Expenses</span><span class="kpi-value">&#8358;{total_expense:,.0f}</span></div>
+    <div class="bw-kpi highlight"><span class="kpi-label">Net<br>Surplus</span><span class="kpi-value {surplus_cls}">&#8358;{net_surplus:,.0f}</span></div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -719,73 +608,30 @@ with st.expander("Performance Analysis"):
     if total_income == 0:
         st.info("Record income to see performance analysis.")
     else:
-        if savings_rate >= 30:
-            s_cls, s_txt = "green",  f"Savings rate {savings_rate:.1f}% \u2014 strong surplus discipline"
-        elif 15 <= savings_rate < 30:
-            s_cls, s_txt = "yellow", f"Savings rate {savings_rate:.1f}% \u2014 stable, room to optimize"
-        elif 1 <= savings_rate < 15:
-            s_cls, s_txt = "yellow", f"Savings rate {savings_rate:.1f}% \u2014 margin is thin"
-        else:
-            s_cls, s_txt = "red",    f"Deficit \u2014 expenses exceed income by \u20a6{abs(net_surplus):,.0f}"
-
+        if savings_rate >= 30:   s_cls, s_txt = "green",  f"Savings rate {savings_rate:.1f}% \u2014 strong surplus discipline"
+        elif savings_rate >= 15: s_cls, s_txt = "yellow", f"Savings rate {savings_rate:.1f}% \u2014 stable, room to optimize"
+        elif savings_rate >= 1:  s_cls, s_txt = "yellow", f"Savings rate {savings_rate:.1f}% \u2014 margin is thin"
+        else:                    s_cls, s_txt = "red",    f"Deficit \u2014 expenses exceed income by \u20a6{abs(net_surplus):,.0f}"
         st.markdown(f'<div class="bw-status {s_cls}"><span class="bw-status-dot"></span>{s_txt}</div>', unsafe_allow_html=True)
 
         bar_pct = min(max(savings_rate, 0), 100)
-        st.markdown(f"""
-        <div style="margin:18px 0 22px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
-                <span style="font-family:var(--font-disp);font-size:0.72rem;color:var(--cream-mute);">Savings Rate</span>
-                <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--gold);">{savings_rate:.1f}%</span>
-            </div>
-            <div class="bw-bar-wrap"><div class="bw-bar-fill" style="width:{bar_pct}%"></div></div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"""<div style="margin:18px 0 22px;"><div style="display:flex;justify-content:space-between;margin-bottom:7px;"><span style="font-family:var(--font-disp);font-size:0.7rem;color:var(--cream-mute);">Savings Rate</span><span style="font-family:var(--font-mono);font-size:0.67rem;color:var(--gold);">{savings_rate:.1f}%</span></div><div class="bw-bar-wrap"><div class="bw-bar-fill" style="width:{bar_pct}%"></div></div></div>""", unsafe_allow_html=True)
 
         if not income_df.empty:
             active_income  = income_df[income_df["income_type"] == "Active"]["amount"].sum()
             passive_income = income_df[income_df["income_type"] == "Passive"]["amount"].sum()
             active_pct     = (active_income  / total_income * 100) if total_income else 0
             passive_pct    = (passive_income / total_income * 100) if total_income else 0
-
-            st.markdown('<p style="font-family:var(--font-disp);font-size:0.72rem;color:var(--cream-mute);margin:18px 0 8px;">Income Structure</p>', unsafe_allow_html=True)
-            st.markdown(f"""
-            <div>
-                <div class="bw-insight-row">
-                    <span class="ir-label">Active Income</span>
-                    <span class="ir-value">&#8358;{active_income:,.0f}<span class="ir-sub">{active_pct:.0f}%</span></span>
-                </div>
-                <div class="bw-insight-row">
-                    <span class="ir-label">Passive Income</span>
-                    <span class="ir-value">&#8358;{passive_income:,.0f}<span class="ir-sub">{passive_pct:.0f}%</span></span>
-                </div>
-            </div>
-            <div style="margin:14px 0 18px;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
-                    <span style="font-family:var(--font-disp);font-size:0.72rem;color:var(--cream-mute);">Passive Income Share</span>
-                    <span style="font-family:var(--font-mono);font-size:0.68rem;color:var(--gold);">{passive_pct:.0f}%</span>
-                </div>
-                <div class="bw-bar-wrap"><div class="bw-bar-fill" style="width:{passive_pct}%"></div></div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            if active_pct >= 70:
-                st.markdown('<div class="bw-status yellow"><span class="bw-status-dot"></span>Income heavily effort-dependent \u2014 grow passive streams to build resilience</div>', unsafe_allow_html=True)
-            elif passive_pct >= 50:
-                st.markdown('<div class="bw-status green"><span class="bw-status-dot"></span>Passive income majority \u2014 strong foundation for wealth accumulation</div>', unsafe_allow_html=True)
-            else:
-                st.markdown('<div class="bw-status yellow"><span class="bw-status-dot"></span>Moderately diversified \u2014 continue growing passive streams</div>', unsafe_allow_html=True)
+            st.markdown('<p style="font-family:var(--font-disp);font-size:0.7rem;color:var(--cream-mute);margin:18px 0 8px;">Income Structure</p>', unsafe_allow_html=True)
+            st.markdown(f"""<div><div class="bw-insight-row"><span class="ir-label">Active Income</span><span class="ir-value">&#8358;{active_income:,.0f}<span class="ir-sub">{active_pct:.0f}%</span></span></div><div class="bw-insight-row"><span class="ir-label">Passive Income</span><span class="ir-value">&#8358;{passive_income:,.0f}<span class="ir-sub">{passive_pct:.0f}%</span></span></div></div><div style="margin:14px 0 18px;"><div style="display:flex;justify-content:space-between;margin-bottom:7px;"><span style="font-family:var(--font-disp);font-size:0.7rem;color:var(--cream-mute);">Passive Income Share</span><span style="font-family:var(--font-mono);font-size:0.67rem;color:var(--gold);">{passive_pct:.0f}%</span></div><div class="bw-bar-wrap"><div class="bw-bar-fill" style="width:{passive_pct}%"></div></div></div>""", unsafe_allow_html=True)
+            if active_pct >= 70:    st.markdown('<div class="bw-status yellow"><span class="bw-status-dot"></span>Income heavily effort-dependent \u2014 grow passive streams</div>', unsafe_allow_html=True)
+            elif passive_pct >= 50: st.markdown('<div class="bw-status green"><span class="bw-status-dot"></span>Passive income majority \u2014 strong foundation for wealth accumulation</div>', unsafe_allow_html=True)
+            else:                   st.markdown('<div class="bw-status yellow"><span class="bw-status-dot"></span>Moderately diversified \u2014 continue growing passive streams</div>', unsafe_allow_html=True)
 
         if not expense_df.empty:
             sorted_exp = expense_df.sort_values("amount", ascending=False).head(3)
-            st.markdown('<p style="font-family:var(--font-disp);font-size:0.72rem;color:var(--cream-mute);margin:20px 0 8px;">Top Cost Drivers</p>', unsafe_allow_html=True)
-            rows = ""
-            for _, row in sorted_exp.iterrows():
-                share = f"{row['amount']/total_expense*100:.0f}%" if total_expense > 0 else "0%"
-                rows += f"""
-                <div class="bw-insight-row">
-                    <span class="ir-label">{row['category']}</span>
-                    <span class="ir-value">&#8358;{row['amount']:,.0f}<span class="ir-sub">{share}</span></span>
-                </div>"""
+            st.markdown('<p style="font-family:var(--font-disp);font-size:0.7rem;color:var(--cream-mute);margin:20px 0 8px;">Top Cost Drivers</p>', unsafe_allow_html=True)
+            rows = "".join(f'<div class="bw-insight-row"><span class="ir-label">{row["category"]}</span><span class="ir-value">&#8358;{row["amount"]:,.0f}<span class="ir-sub">{row["amount"]/total_expense*100:.0f}%</span></span></div>' for _, row in sorted_exp.iterrows())
             st.markdown(f'<div>{rows}</div>', unsafe_allow_html=True)
 
 # ====================== ALLOCATION ======================
@@ -805,23 +651,11 @@ with st.expander("Allocation Planner"):
         st.warning("No surplus available. Reduce expenses to generate allocatable surplus.")
     else:
         mode = st.selectbox("Strategy", list(allocation_modes.keys()))
-        allocation_list = [
-            {"Category": cat, "Pct": pct, "Amount": round(net_surplus * pct / 100, 0)}
-            for cat, pct in allocation_modes[mode].items()
-        ]
-
-        st.markdown('<p style="font-family:var(--font-disp);font-size:0.7rem;color:var(--cream-mute);margin:14px 0 10px;">Allocation Breakdown &nbsp;&middot;&nbsp; Live calculation from current surplus</p>', unsafe_allow_html=True)
-
-        alloc_rows = ""
-        for r in allocation_list:
-            alloc_rows += f"""
-            <div class="bw-alloc-row">
-                <span class="ar-cat">{r['Category']}</span>
-                <span class="ar-pct">{r['Pct']}%</span>
-                <span class="ar-amt">&#8358;{r['Amount']:,.0f}</span>
-            </div>"""
+        allocation_list = [{"Category": cat, "Pct": pct, "Amount": round(net_surplus * pct / 100, 0)} for cat, pct in allocation_modes[mode].items()]
+        st.markdown('<p style="font-family:var(--font-disp);font-size:0.68rem;color:var(--cream-mute);margin:14px 0 10px;">Live allocation from current surplus</p>', unsafe_allow_html=True)
+        alloc_rows = "".join(f'<div class="bw-alloc-row"><span class="ar-cat">{r["Category"]}</span><span class="ar-pct">{r["Pct"]}%</span><span class="ar-amt">&#8358;{r["Amount"]:,.0f}</span></div>' for r in allocation_list)
         st.markdown(f'<div class="bw-alloc-wrap">{alloc_rows}</div>', unsafe_allow_html=True)
-        st.markdown('<p style="font-family:var(--font-disp);font-size:0.67rem;color:var(--cream-mute);line-height:1.6;">Allocation updates automatically as income and expenses change. Lock the month below to permanently record this period.</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-family:var(--font-disp);font-size:0.65rem;color:var(--cream-mute);line-height:1.6;">Updates automatically as records change. Lock the month below to permanently freeze this period.</p>', unsafe_allow_html=True)
 
 # ====================== LOCK MONTH ======================
 st.markdown('<span class="bw-section-label">Period Control</span>', unsafe_allow_html=True)
@@ -830,14 +664,7 @@ if month_locked:
     st.markdown(f'<div class="bw-lock-banner">&#128274;&nbsp;{current_month_full} is permanently locked. All records are frozen.</div>', unsafe_allow_html=True)
 else:
     with st.expander(f"Lock {current_month_full}"):
-        st.markdown(f"""
-        <p style="font-family:var(--font-disp);font-size:0.8rem;color:var(--cream-dim);line-height:1.75;margin-bottom:18px;">
-        Locking <strong style="color:var(--white);">{current_month_full}</strong> will permanently freeze all income, expense,
-        and allocation records for this period. Once locked,
-        <strong style="color:var(--gold);">no entries can be added, edited, or deleted.</strong>
-        This action cannot be undone.
-        </p>
-        """, unsafe_allow_html=True)
+        st.markdown(f'<p style="font-family:var(--font-disp);font-size:0.78rem;color:var(--cream-dim);line-height:1.75;margin-bottom:18px;">Locking <strong style="color:var(--white);">{current_month_full}</strong> will permanently freeze all records for this period. Once locked, <strong style="color:var(--gold);">no entries can be added, edited, or deleted.</strong> This action cannot be undone.</p>', unsafe_allow_html=True)
         col_lock, col_space = st.columns([1, 2])
         with col_lock:
             if st.button(f"Lock {current_month_full}", key="lock_btn"):
@@ -847,8 +674,4 @@ else:
 
 # ====================== FOOTER ======================
 year = datetime.today().year
-st.markdown(f"""
-<div class="bw-footer">
-    Biverway Financial OS &nbsp;&middot;&nbsp; Built on the Biverway Wealth System &nbsp;&middot;&nbsp; {year}
-</div>
-""", unsafe_allow_html=True)
+st.markdown(f'<div class="bw-footer">Biverway Financial OS &nbsp;&middot;&nbsp; Built on the Biverway Wealth System &nbsp;&middot;&nbsp; {year}</div>', unsafe_allow_html=True)
