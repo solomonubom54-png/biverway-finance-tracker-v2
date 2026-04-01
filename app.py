@@ -303,7 +303,7 @@ ul[role="listbox"],
 /* ── SECONDARY BUTTONS — quiet, unobtrusive ── */
 [data-testid="baseButton-secondary"] {
     background: transparent !important;
-    color: rgba(232,224,208,0.35) !important;
+    color: rgba(232,224,208,0.4) !important;
     border: 1px solid rgba(255,255,255,0.07) !important;
     border-radius: var(--radius-sm) !important;
     font-family: var(--font-disp) !important;
@@ -316,7 +316,7 @@ ul[role="listbox"],
 [data-testid="baseButton-secondary"]:hover {
     background: rgba(255,255,255,0.03) !important;
     border-color: rgba(201,168,76,0.2) !important;
-    color: rgba(232,224,208,0.65) !important;
+    color: rgba(232,224,208,0.7) !important;
 }
 
 /* ── EXPANDERS ── */
