@@ -136,7 +136,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
    WIDGET OVERRIDES
    ═══════════════════════════════════ */
 
-/* Labels */
 [data-testid="stWidgetLabel"] p,
 [data-baseweb="form-control-label"] {
     font-family: var(--font-disp) !important;
@@ -144,10 +143,8 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     color: var(--cream-mute) !important;
     font-weight: 400 !important;
     margin-bottom: 6px !important;
-    letter-spacing: 0.01em !important;
 }
 
-/* Text inputs */
 [data-baseweb="input"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
@@ -166,7 +163,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     box-shadow: none !important;
 }
 
-/* Textarea */
 [data-baseweb="textarea"] textarea {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
@@ -178,7 +174,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     box-shadow: none !important;
 }
 
-/* Number input */
 [data-testid="stNumberInput"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
@@ -201,7 +196,6 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     background: var(--gold-glow) !important;
 }
 
-/* Date input */
 [data-testid="stDateInput"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
@@ -216,25 +210,19 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
     padding: 11px 14px !important;
 }
 
-/* ═══════════════════════════════════
-   SELECT / DROPDOWN — dark, white text
-   ═══════════════════════════════════ */
-
-/* Collapsed trigger */
+/* ── SELECT TRIGGER — all dropdowns ── */
 [data-baseweb="select"] > div {
     background: var(--bg-input) !important;
     border: 1px solid var(--border-soft) !important;
     border-radius: var(--radius-sm) !important;
     box-shadow: none !important;
-    min-height: 44px !important;
+    min-height: 42px !important;
 }
 [data-baseweb="select"] > div > div {
     padding: 8px 12px !important;
 }
-/* Selected value text — white, smaller */
 [data-baseweb="select"] > div > div > div,
-[data-baseweb="select"] > div span,
-[data-baseweb="select"] [data-testid="stSelectboxVirtualDropdown"] {
+[data-baseweb="select"] > div span {
     color: var(--white) !important;
     font-family: var(--font-disp) !important;
     font-size: 0.8rem !important;
@@ -244,7 +232,20 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 }
 [data-baseweb="select"] svg { color: rgba(232,224,208,0.25) !important; width: 14px !important; }
 
-/* Dropdown list — dark background */
+/* ── REMOVE / ACTION SELECTBOX — quieter, smaller ── */
+[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    min-height: 36px !important;
+}
+[data-testid="stSelectbox"] [data-baseweb="select"] > div > div {
+    padding: 5px 10px !important;
+}
+[data-testid="stSelectbox"] [data-baseweb="select"] > div > div > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div span {
+    font-size: 0.72rem !important;
+    color: rgba(232,224,208,0.45) !important;
+}
+
+/* ── DROPDOWN LIST — dark ── */
 [data-baseweb="popover"],
 [data-baseweb="menu"],
 ul[role="listbox"],
@@ -254,11 +255,9 @@ ul[role="listbox"],
     border-radius: var(--radius-sm) !important;
     box-shadow: 0 16px 48px rgba(0,0,0,0.75), 0 2px 8px rgba(0,0,0,0.5) !important;
 }
-
-/* Options — white text, smaller, dark bg */
 [role="option"] {
     background: transparent !important;
-    color: rgba(232,224,208,0.75) !important;
+    color: rgba(232,224,208,0.7) !important;
     font-family: var(--font-disp) !important;
     font-size: 0.78rem !important;
     font-weight: 400 !important;
@@ -281,11 +280,7 @@ ul[role="listbox"],
     font-weight: 500 !important;
 }
 
-/* ═══════════════════════════════════
-   BUTTONS
-   ═══════════════════════════════════ */
-
-/* PRIMARY — gold */
+/* ── PRIMARY BUTTON — gold ── */
 [data-testid="stFormSubmitButton"] button {
     background: var(--gold) !important;
     color: #080a0e !important;
@@ -305,26 +300,26 @@ ul[role="listbox"],
     transform: translateY(-1px) !important;
 }
 
-/* SECONDARY — black bg, white text, small */
+/* ── SECONDARY BUTTONS — quiet, unobtrusive ── */
 [data-testid="baseButton-secondary"] {
-    background: #0a0d13 !important;
-    color: rgba(232,224,208,0.75) !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    background: transparent !important;
+    color: rgba(232,224,208,0.35) !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
     border-radius: var(--radius-sm) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.7rem !important;
+    font-size: 0.62rem !important;
     font-weight: 400 !important;
-    padding: 7px 14px !important;
+    padding: 5px 10px !important;
     transition: all 0.15s !important;
     box-shadow: none !important;
 }
 [data-testid="baseButton-secondary"]:hover {
-    background: #111520 !important;
-    border-color: rgba(201,168,76,0.25) !important;
-    color: var(--white) !important;
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(201,168,76,0.2) !important;
+    color: rgba(232,224,208,0.65) !important;
 }
 
-/* Expanders */
+/* ── EXPANDERS ── */
 [data-testid="stExpander"] {
     background: var(--bg-card) !important;
     border: 1px solid var(--border-md) !important;
@@ -347,12 +342,12 @@ ul[role="listbox"],
 [data-testid="stExpanderToggleIcon"] { color: rgba(201,168,76,0.45) !important; }
 [data-testid="stExpander"] > details > div { padding: 18px 18px 20px !important; background: var(--bg-card) !important; }
 
-/* Tabs */
+/* ── TABS ── */
 [data-testid="stTabs"] [role="tablist"] { border-bottom: 1px solid var(--border-md) !important; background: transparent !important; }
 [data-testid="stTabs"] [role="tab"] { font-family: var(--font-disp) !important; font-size: 0.73rem !important; font-weight: 400 !important; color: var(--cream-mute) !important; padding: 10px 20px !important; border-radius: 0 !important; border-bottom: 2px solid transparent !important; background: transparent !important; }
 [data-testid="stTabs"] [role="tab"][aria-selected="true"] { color: var(--gold) !important; border-bottom-color: var(--gold) !important; }
 
-/* Alerts */
+/* ── ALERTS ── */
 [data-testid="stAlert"] { border-radius: var(--radius-sm) !important; font-family: var(--font-disp) !important; font-size: 0.74rem !important; border-left-width: 2px !important; }
 [data-testid="stNotificationContentInfo"]    { background: rgba(232,224,208,0.03) !important; border-left-color: var(--cream-mute) !important; }
 [data-testid="stNotificationContentSuccess"] { background: var(--green-bg) !important; border-left-color: var(--green) !important; }
@@ -514,21 +509,27 @@ if not income_df.empty:
         if st.session_state.confirm_del_income is None:
             col_del, col_clr = st.columns([3, 1])
             with col_clr:
-                if st.button("Clear Month", key="clr_inc"): clear_income_month(current_month); st.rerun()
+                if st.button("Clear Month", key="clr_inc"):
+                    clear_income_month(current_month)
+                    st.rerun()
             with col_del:
                 selected_inc = st.selectbox("Remove Income", options=list(inc_map.keys()), key="del_inc_select")
                 if st.button("Remove Income", key="del_inc_btn"):
-                    st.session_state.confirm_del_income = selected_inc; st.rerun()
+                    st.session_state.confirm_del_income = selected_inc
+                    st.rerun()
         else:
             entry = st.session_state.confirm_del_income
             st.markdown(f'<div class="bw-confirm"><p>Remove <strong>{entry}</strong>?<br><span style="font-size:0.7rem;color:var(--cream-mute);">This cannot be undone.</span></p></div>', unsafe_allow_html=True)
             col_yes, col_no = st.columns([1, 1])
             with col_yes:
                 if st.button("Yes, Remove", key="confirm_inc_yes"):
-                    delete_income(inc_map[entry]); st.session_state.confirm_del_income = None; st.rerun()
+                    delete_income(inc_map[entry])
+                    st.session_state.confirm_del_income = None
+                    st.rerun()
             with col_no:
                 if st.button("Cancel", key="confirm_inc_no"):
-                    st.session_state.confirm_del_income = None; st.rerun()
+                    st.session_state.confirm_del_income = None
+                    st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.67rem;color:var(--cream-mute);padding:6px 0;">No income entries for this period.</p>', unsafe_allow_html=True)
 
@@ -569,21 +570,27 @@ if not expense_df.empty:
         if st.session_state.confirm_del_expense is None:
             col_del2, col_clr2 = st.columns([3, 1])
             with col_clr2:
-                if st.button("Clear Month", key="clr_exp"): clear_expense_month(current_month); st.rerun()
+                if st.button("Clear Month", key="clr_exp"):
+                    clear_expense_month(current_month)
+                    st.rerun()
             with col_del2:
                 selected_exp = st.selectbox("Remove Expense", options=list(exp_map.keys()), key="del_exp_select")
                 if st.button("Remove Expense", key="del_exp_btn"):
-                    st.session_state.confirm_del_expense = selected_exp; st.rerun()
+                    st.session_state.confirm_del_expense = selected_exp
+                    st.rerun()
         else:
             entry = st.session_state.confirm_del_expense
             st.markdown(f'<div class="bw-confirm"><p>Remove <strong>{entry}</strong>?<br><span style="font-size:0.7rem;color:var(--cream-mute);">This cannot be undone.</span></p></div>', unsafe_allow_html=True)
             col_yes2, col_no2 = st.columns([1, 1])
             with col_yes2:
                 if st.button("Yes, Remove", key="confirm_exp_yes"):
-                    delete_expense(exp_map[entry]); st.session_state.confirm_del_expense = None; st.rerun()
+                    delete_expense(exp_map[entry])
+                    st.session_state.confirm_del_expense = None
+                    st.rerun()
             with col_no2:
                 if st.button("Cancel", key="confirm_exp_no"):
-                    st.session_state.confirm_del_expense = None; st.rerun()
+                    st.session_state.confirm_del_expense = None
+                    st.rerun()
 else:
     st.markdown('<p style="font-family:var(--font-mono);font-size:0.67rem;color:var(--cream-mute);padding:6px 0;">No expense entries for this period.</p>', unsafe_allow_html=True)
 
