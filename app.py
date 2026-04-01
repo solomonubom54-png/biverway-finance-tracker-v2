@@ -235,9 +235,10 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"] {
 /* ── REMOVE / ACTION SELECTBOX — quieter, smaller ── */
 [data-testid="stSelectbox"] [data-baseweb="select"] > div {
     min-height: 36px !important;
+    padding: 0 !important;
 }
 [data-testid="stSelectbox"] [data-baseweb="select"] > div > div {
-    padding: 5px 10px !important;
+    padding: 6px 10px !important;
 }
 [data-testid="stSelectbox"] [data-baseweb="select"] > div > div > div,
 [data-testid="stSelectbox"] [data-baseweb="select"] > div span {
