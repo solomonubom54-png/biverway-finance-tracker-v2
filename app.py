@@ -282,71 +282,87 @@ ul[role="listbox"],
     font-weight: 500 !important;
 }
 
-/* ── PRIMARY BUTTON — gold ── */
-[data-testid="stFormSubmitButton"] button {
+/* ══════════════════════════════════════
+   BUTTON HIERARCHY — aggressive overrides
+   Targets every possible Streamlit button
+   selector to ensure styles always apply
+   ══════════════════════════════════════ */
+
+/* ── ALL BUTTONS — base reset ── */
+.stButton button,
+.stButton > button,
+[data-testid="baseButton-secondary"],
+[data-testid="baseButton-secondary"] > div,
+button[kind="secondary"],
+[data-testid="stBaseButton-secondary"] {
+    background: transparent !important;
+    color: rgba(232,224,208,0.3) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    border-radius: 6px !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.54rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    padding: 5px 9px !important;
+    min-height: unset !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    box-shadow: none !important;
+    transition: all 0.15s !important;
+    white-space: nowrap !important;
+}
+
+.stButton button:hover,
+[data-testid="baseButton-secondary"]:hover,
+[data-testid="stBaseButton-secondary"]:hover {
+    background: rgba(255,255,255,0.025) !important;
+    border-color: rgba(201,168,76,0.15) !important;
+    color: rgba(232,224,208,0.5) !important;
+    box-shadow: none !important;
+}
+
+/* ── FORM SUBMIT BUTTONS — gold primary ── */
+[data-testid="stFormSubmitButton"] button,
+[data-testid="stFormSubmitButton"] > button,
+button[kind="primaryFormSubmit"] {
     background: var(--gold) !important;
     color: #080a0e !important;
     border: none !important;
     border-radius: var(--radius-sm) !important;
     font-family: var(--font-disp) !important;
-    font-size: 0.76rem !important;
+    font-size: 0.72rem !important;
     font-weight: 600 !important;
-    letter-spacing: 0.04em !important;
-    padding: 12px 24px !important;
+    letter-spacing: 0.05em !important;
+    text-transform: none !important;
+    padding: 10px 20px !important;
     width: 100% !important;
-    margin-top: 10px !important;
-    transition: background 0.18s, transform 0.1s !important;
+    margin-top: 8px !important;
+    transition: background 0.18s !important;
+    box-shadow: none !important;
 }
 [data-testid="stFormSubmitButton"] button:hover {
     background: #d4b460 !important;
-    transform: translateY(-1px) !important;
+    color: #080a0e !important;
 }
 
-/* ── SECONDARY BUTTONS — very quiet, utility actions ── */
-[data-testid="baseButton-secondary"] {
-    background: transparent !important;
-    color: rgba(232,224,208,0.28) !important;
-    border: 1px solid rgba(255,255,255,0.05) !important;
-    border-radius: var(--radius-sm) !important;
+/* ── RECORD AMOUNTS — dominant, largest text ── */
+.rr-amount {
     font-family: var(--font-mono) !important;
-    font-size: 0.55rem !important;
-    font-weight: 400 !important;
-    letter-spacing: 0.06em !important;
-    text-transform: uppercase !important;
-    padding: 5px 8px !important;
-    transition: all 0.15s !important;
-    box-shadow: none !important;
-    white-space: nowrap !important;
-}
-[data-testid="baseButton-secondary"]:hover {
-    background: rgba(255,255,255,0.03) !important;
-    border-color: rgba(201,168,76,0.18) !important;
-    color: rgba(232,224,208,0.55) !important;
-}
-
-/* ── SIGN OUT — micro, far right, barely visible ── */
-[data-testid="stHorizontalBlock"] [data-testid="baseButton-secondary"]:last-child {
-    font-size: 0.52rem !important;
-    color: rgba(232,224,208,0.2) !important;
-    padding: 4px 7px !important;
-}
-
-/* ── RECORD AMOUNTS — dominant data hierarchy ── */
-.bw-record-row .rr-amount {
-    font-family: var(--font-mono) !important;
-    font-size: 1.0rem !important;
+    font-size: 1.02rem !important;
     font-weight: 600 !important;
     color: var(--white) !important;
 }
-.bw-record-row .rr-source {
-    font-size: 0.84rem !important;
+.rr-source {
+    font-size: 0.83rem !important;
     font-weight: 500 !important;
     color: var(--white) !important;
 }
-.bw-record-row .rr-meta {
-    font-size: 0.60rem !important;
+.rr-meta {
+    font-size: 0.59rem !important;
     color: var(--cream-mute) !important;
     font-weight: 300 !important;
+    letter-spacing: 0.03em !important;
 }
 
 /* ── EXPANDERS ── */
@@ -943,3 +959,60 @@ else:
 # ====================== FOOTER ======================
 year = datetime.today().year
 st.markdown(f'<div class="bw-footer">Biverway Financial OS &nbsp;&middot;&nbsp; Built on the Biverway Wealth System &nbsp;&middot;&nbsp; {year}</div>', unsafe_allow_html=True)
+
+# ====================== STYLE ENFORCEMENT ======================
+# JS injection: runs after Streamlit renders and enforces button styles
+# that CSS selectors alone can't reliably reach due to Streamlit's
+# dynamic class name generation. This is the most reliable method.
+st.markdown("""
+<script>
+(function enforceBWStyles() {
+    function applyStyles() {
+        // Target all rendered buttons
+        const allBtns = document.querySelectorAll(
+            '.stButton button, [data-testid="baseButton-secondary"], [data-testid="stBaseButton-secondary"]'
+        );
+        allBtns.forEach(btn => {
+            // Skip form submit buttons (gold primary)
+            const isFormSubmit = btn.closest('[data-testid="stFormSubmitButton"]');
+            if (isFormSubmit) return;
+            btn.style.setProperty('background', 'transparent', 'important');
+            btn.style.setProperty('color', 'rgba(232,224,208,0.3)', 'important');
+            btn.style.setProperty('border', '1px solid rgba(255,255,255,0.06)', 'important');
+            btn.style.setProperty('border-radius', '6px', 'important');
+            btn.style.setProperty('font-family', "'IBM Plex Mono', monospace", 'important');
+            btn.style.setProperty('font-size', '0.54rem', 'important');
+            btn.style.setProperty('font-weight', '400', 'important');
+            btn.style.setProperty('letter-spacing', '0.08em', 'important');
+            btn.style.setProperty('text-transform', 'uppercase', 'important');
+            btn.style.setProperty('padding', '5px 9px', 'important');
+            btn.style.setProperty('box-shadow', 'none', 'important');
+            btn.style.setProperty('min-height', 'unset', 'important');
+        });
+
+        // Form submit buttons — gold
+        const formBtns = document.querySelectorAll('[data-testid="stFormSubmitButton"] button');
+        formBtns.forEach(btn => {
+            btn.style.setProperty('background', '#c9a84c', 'important');
+            btn.style.setProperty('color', '#080a0e', 'important');
+            btn.style.setProperty('border', 'none', 'important');
+            btn.style.setProperty('font-family', "'Sora', sans-serif", 'important');
+            btn.style.setProperty('font-size', '0.72rem', 'important');
+            btn.style.setProperty('font-weight', '600', 'important');
+            btn.style.setProperty('text-transform', 'none', 'important');
+            btn.style.setProperty('letter-spacing', '0.05em', 'important');
+            btn.style.setProperty('padding', '10px 20px', 'important');
+            btn.style.setProperty('width', '100%', 'important');
+            btn.style.setProperty('box-shadow', 'none', 'important');
+        });
+    }
+
+    // Run on load
+    applyStyles();
+
+    // Re-run whenever Streamlit re-renders
+    const observer = new MutationObserver(applyStyles);
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
+</script>
+""", unsafe_allow_html=True)
