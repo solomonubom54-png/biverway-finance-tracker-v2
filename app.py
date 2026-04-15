@@ -302,23 +302,51 @@ ul[role="listbox"],
     transform: translateY(-1px) !important;
 }
 
-/* ── SECONDARY BUTTONS — quiet, unobtrusive ── */
+/* ── SECONDARY BUTTONS — very quiet, utility actions ── */
 [data-testid="baseButton-secondary"] {
     background: transparent !important;
-    color: rgba(232,224,208,0.4) !important;
-    border: 1px solid rgba(255,255,255,0.07) !important;
+    color: rgba(232,224,208,0.28) !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
     border-radius: var(--radius-sm) !important;
-    font-family: var(--font-disp) !important;
-    font-size: 0.62rem !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.55rem !important;
     font-weight: 400 !important;
-    padding: 5px 10px !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding: 5px 8px !important;
     transition: all 0.15s !important;
     box-shadow: none !important;
+    white-space: nowrap !important;
 }
 [data-testid="baseButton-secondary"]:hover {
     background: rgba(255,255,255,0.03) !important;
-    border-color: rgba(201,168,42,0.2) !important;
-    color: rgba(232,224,208,0.7) !important;
+    border-color: rgba(201,168,76,0.18) !important;
+    color: rgba(232,224,208,0.55) !important;
+}
+
+/* ── SIGN OUT — micro, far right, barely visible ── */
+[data-testid="stHorizontalBlock"] [data-testid="baseButton-secondary"]:last-child {
+    font-size: 0.52rem !important;
+    color: rgba(232,224,208,0.2) !important;
+    padding: 4px 7px !important;
+}
+
+/* ── RECORD AMOUNTS — dominant data hierarchy ── */
+.bw-record-row .rr-amount {
+    font-family: var(--font-mono) !important;
+    font-size: 1.0rem !important;
+    font-weight: 600 !important;
+    color: var(--white) !important;
+}
+.bw-record-row .rr-source {
+    font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    color: var(--white) !important;
+}
+.bw-record-row .rr-meta {
+    font-size: 0.60rem !important;
+    color: var(--cream-mute) !important;
+    font-weight: 300 !important;
 }
 
 /* ── EXPANDERS ── */
@@ -479,7 +507,7 @@ with col_lo:
 # ====================== WORKING PERIOD — Month/Year Dropdowns ======================
 st.markdown('<span class="bw-section-label">Working Period</span>', unsafe_allow_html=True)
 
-col_m, col_y = st.columns([2, 1])
+col_m, col_y = st.columns([3, 2])
 with col_m:
     selected_month_name = st.selectbox(
         "Month",
@@ -489,11 +517,13 @@ with col_m:
     )
 with col_y:
     current_year = datetime.today().year
-    year_options = list(range(current_year - 3, current_year + 2))
+    # Range auto-shifts every year: always 4 years back, 4 years forward
+    # So in 2028 you'll see 2024–2032, in 2030 you'll see 2026–2034, etc.
+    year_options = list(range(current_year - 4, current_year + 5))
     selected_year = st.selectbox(
         "Year",
         options=year_options,
-        index=year_options.index(st.session_state.working_year) if st.session_state.working_year in year_options else len(year_options) - 2,
+        index=year_options.index(st.session_state.working_year) if st.session_state.working_year in year_options else 4,
         key="year_select"
     )
 
@@ -592,7 +622,7 @@ if not income_df.empty:
                     st.rerun()
 
         elif st.session_state.confirm_del_income is None:
-            col_sel, col_edit, col_del, col_clr = st.columns([3, 1, 1, 1])
+            col_sel, col_edit, col_del, col_clr = st.columns([4, 1, 1, 1])
             with col_sel:
                 selected_inc = st.selectbox("Select entry", options=list(inc_map.keys()), key="del_inc_select", label_visibility="collapsed")
             with col_edit:
@@ -625,7 +655,7 @@ if not income_df.empty:
 else:
     st.markdown("""
     <div class="bw-empty">
-        <span class="bw-empty-icon">&#8358;</span>
+        <span class="bw-empty-icon">&#8601;</span>
         <span class="bw-empty-text">No income recorded</span>
         <span class="bw-empty-sub">Add your first income entry for this period</span>
     </div>
@@ -701,7 +731,7 @@ if not expense_df.empty:
                     st.rerun()
 
         elif st.session_state.confirm_del_expense is None:
-            col_sel2, col_edit2, col_del2, col_clr2 = st.columns([3, 1, 1, 1])
+            col_sel2, col_edit2, col_del2, col_clr2 = st.columns([4, 1, 1, 1])
             with col_sel2:
                 selected_exp = st.selectbox("Select entry", options=list(exp_map.keys()), key="del_exp_select", label_visibility="collapsed")
             with col_edit2:
